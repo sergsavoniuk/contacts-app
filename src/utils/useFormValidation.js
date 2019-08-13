@@ -1,7 +1,8 @@
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 
 const INPUT_CHANGE = "INPUT_CHANGE";
 const FORM_SUBMITTING = "FORM_SUBMITTING";
+const SET_ERRORS = "SET_ERRORS";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -20,6 +21,14 @@ function reducer(state, action) {
         isSubmitting: true
       };
     }
+    case SET_ERRORS: {
+      const errors = action.payload.errors;
+      return {
+        ...state,
+        errors,
+        isSubmitting: errors === undefined
+      };
+    }
     default:
       return state;
   }
@@ -28,16 +37,12 @@ function reducer(state, action) {
 function init(initialState) {
   return {
     values: initialState,
-    errors: null,
+    errors: undefined,
     isSubmitting: false
   };
 }
 
-export default function useFormValidation({
-  initialState,
-  validate,
-  authenticate
-}) {
+export default function useFormValidation({ initialState, validate, submit }) {
   const [state, dispatch] = useReducer(reducer, initialState, init);
 
   function handleChange(event) {
@@ -52,8 +57,27 @@ export default function useFormValidation({
 
   function handleSubmit(event) {
     event.preventDefault();
+
     dispatch({ type: FORM_SUBMITTING });
-    authenticate();
+
+    const errors = validate(state.values);
+
+    if (Object.keys(errors).length === 0) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: undefined
+        }
+      });
+      submit();
+    } else if (errors) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors
+        }
+      });
+    }
   }
 
   return {

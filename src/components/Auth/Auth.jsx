@@ -6,9 +6,11 @@ import {
   Input,
   SubmitButton,
   StyledLink as Link,
-  Title
+  Title,
+  Error
 } from "./Auth.components";
-import useFormValidation from "./useFormValidation";
+import useFormValidation from "../../utils/useFormValidation";
+import validateAuth from "./validateAuth";
 
 import Loader from "../Loader";
 import authService from "../../api/auth";
@@ -23,7 +25,6 @@ function Auth(props) {
   }, [props.location.pathname]);
 
   async function authenticate() {
-    const { name, email, password } = values;
     try {
       hasAccount
         ? await authService.login({ email, password })
@@ -36,8 +37,8 @@ function Auth(props) {
   }
 
   const {
-    values,
-    errors,
+    values: { name, email, password },
+    errors: { email: emailErr, password: passwordErr } = {},
     isSubmitting,
     handleChange,
     handleSubmit
@@ -47,8 +48,8 @@ function Auth(props) {
       email: "",
       password: ""
     },
-    validate: () => {},
-    authenticate
+    validate: validateAuth,
+    submit: authenticate
   });
 
   if (user.isAuthorized) {
@@ -63,29 +64,36 @@ function Auth(props) {
       <form onSubmit={handleSubmit}>
         {!hasAccount && (
           <Input
-            disabled={isSubmitting}
             name="name"
-            value={values.name}
+            value={name}
             onChange={handleChange}
             placeholder="Enter name"
+            disabled={isSubmitting}
           />
         )}
-
-        <Input
-          disabled={isSubmitting}
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-          placeholder="Enter email"
-        />
-        <Input
-          disabled={isSubmitting}
-          name="password"
-          value={values.password}
-          onChange={handleChange}
-          type="password"
-          placeholder="Enter password"
-        />
+        <>
+          <Input
+            name="email"
+            value={email}
+            onChange={handleChange}
+            placeholder="Enter email"
+            disabled={isSubmitting}
+            error={emailErr}
+          />
+          {emailErr && <Error>{emailErr}</Error>}
+        </>
+        <>
+          <Input
+            name="password"
+            value={password}
+            onChange={handleChange}
+            type="password"
+            placeholder="Enter password"
+            disabled={isSubmitting}
+            error={passwordErr}
+          />
+          {passwordErr && <Error>{passwordErr}</Error>}
+        </>
         <SubmitButton disabled={isSubmitting}>
           {isSubmitting ? <Loader alignment="0 auto" size="30" /> : "Submit"}
         </SubmitButton>

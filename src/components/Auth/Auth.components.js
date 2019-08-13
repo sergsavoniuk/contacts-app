@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 
 export const Wrapper = styled.div`
@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 100px auto;
-  padding: 10px;
+  padding: 20px 40px;
   border: 1px solid #e2e2e2;
   border-radius: 5px;
 `;
@@ -31,6 +31,13 @@ export const Input = styled.input`
   &:focus {
     border: 1px solid rgba(51, 51, 51, 0.7);
   }
+
+  ${props =>
+    props.error &&
+    css`
+      border: 1px solid #fd1000;
+      background-color: #ffe7e6;
+    `}
 `;
 
 export const SubmitButton = styled.button`
@@ -43,6 +50,7 @@ export const SubmitButton = styled.button`
   border: none;
   border-radius: 3px;
   color: #fff;
+  outline: none;
 
   &:hover {
     cursor: pointer;
@@ -63,4 +71,10 @@ export const StyledLink = styled(Link)`
     color: #09529a;
     text-decoration: underline;
   }
+`;
+
+export const Error = styled.span`
+  display: inline-block;
+  color: #d01c10;
+  padding-bottom: 10px;
 `;
