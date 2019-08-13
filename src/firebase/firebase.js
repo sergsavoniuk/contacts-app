@@ -6,12 +6,10 @@ import firebaseConfig from "./config";
 class Firebase {
   constructor() {
     app.initializeApp(firebaseConfig);
-  }
-
-  get auth() {
-    return app.auth();
+    this.auth = app.auth();
   }
 }
 
 const firebase = new Firebase();
+
 export default firebase;
