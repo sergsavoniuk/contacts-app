@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 
 import {
   FormWrapper,
@@ -9,8 +9,17 @@ import {
 } from "../shared/formControls.components";
 import useFormValidation from "../../utils/useFormValidation";
 import validateContact from "./validateContact";
+import { useAuthContext } from "../Auth/AuthContext";
+import contactsService from "../../api/contacts";
+import { NameIcon } from "./ContactsList.components";
 
-function NewContact() {
+function NewContact(props) {
+  const user = useAuthContext();
+
+  const isEditMode = useMemo(() => props.match.path === "/contacts/:id/edit", [
+    props.match.path
+  ]);
+
   const {
     values: { firstName, lastName, phone, email, skype },
     errors: {
@@ -21,6 +30,7 @@ function NewContact() {
       skype: skypeErr
     } = {},
     isSubmitting,
+    setInitialValues,
     handleChange,
     handleSubmit
   } = useFormValidation({
@@ -32,12 +42,60 @@ function NewContact() {
       skype: ""
     },
     validate: validateContact,
-    authenticate: () => {}
+    submit: isEditMode ? updateContact : createContact
   });
+
+  useEffect(() => {
+    if (isEditMode) {
+      contactsService
+        .getContact(props.match.params.id)
+        .then(({ firstName, lastName, phone, email, skype }) => {
+          setInitialValues({
+            firstName,
+            lastName,
+            phone,
+            email,
+            skype
+          });
+        });
+    }
+  }, [isEditMode, props.match.params.id]);
+
+  async function createContact() {
+    try {
+      contactsService.createContact({
+        parentUID: user.uid,
+        firstName,
+        lastName,
+        phone,
+        email,
+        skype
+      });
+      props.history.push("/contacts");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function updateContact() {
+    try {
+      contactsService.updateContact({
+        id: props.match.params.id,
+        firstName,
+        lastName,
+        phone,
+        email,
+        skype
+      });
+      props.history.push("/contacts");
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <FormWrapper>
-      <Title>Add Contact</Title>
+      <Title>{isEditMode ? "Edit Contact" : "Add Contact"}</Title>
       <form onSubmit={handleSubmit}>
         <>
           <Input

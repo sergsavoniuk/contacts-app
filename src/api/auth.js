@@ -1,5 +1,4 @@
 import firebase from "../firebase/firebase";
-import "firebase/auth";
 
 class AuthService {
   async login({ email, password }) {

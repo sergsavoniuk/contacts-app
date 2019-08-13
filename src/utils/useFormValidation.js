@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 
 const INPUT_CHANGE = "INPUT_CHANGE";
+const SET_INITIAL_VALUES = "SET_INITIAL_VALUES";
 const FORM_SUBMITTING = "FORM_SUBMITTING";
 const SET_ERRORS = "SET_ERRORS";
 
@@ -13,6 +14,12 @@ function reducer(state, action) {
           ...state.values,
           [action.payload.name]: action.payload.value
         }
+      };
+    }
+    case SET_INITIAL_VALUES: {
+      return {
+        ...state,
+        values: action.payload.values
       };
     }
     case FORM_SUBMITTING: {
@@ -55,6 +62,15 @@ export default function useFormValidation({ initialState, validate, submit }) {
     });
   }
 
+  function setInitialValues(values) {
+    dispatch({
+      type: SET_INITIAL_VALUES,
+      payload: {
+        values
+      }
+    });
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -84,6 +100,7 @@ export default function useFormValidation({ initialState, validate, submit }) {
     values: state.values,
     errors: state.errors,
     isSubmitting: state.isSubmitting,
+    setInitialValues,
     handleChange,
     handleSubmit
   };

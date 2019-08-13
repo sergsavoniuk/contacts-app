@@ -28,6 +28,13 @@ const routes = [
     exact: true,
     protectedRoute: true,
     component: NewContact
+  },
+  {
+    path: "/contacts/:id/edit",
+    key: "/contacts/:id/edit",
+    exact: true,
+    protectedRoute: true,
+    component: NewContact
   }
 ];
 

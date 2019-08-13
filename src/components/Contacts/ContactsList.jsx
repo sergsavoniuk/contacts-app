@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "styled-components/macro";
 
@@ -15,70 +15,60 @@ import {
   Text,
   Row,
   EditButton,
-  RemoveButton
+  RemoveButton,
+  Title
 } from "./ContactsList.components";
+import contactsService from "../../api/contacts";
+import { useAuthContext } from "../Auth/AuthContext";
+import Loader from "../Loader";
 
-const contacts = [
-  {
-    id: 1,
-    name: "Siarhei Savaniuk",
-    phone: "+375292245162",
-    email: "sergsavoniuk@gmail.com",
-    skype: "sergeisavonuik"
-  },
-  {
-    id: 2,
-    name: "Siarhei Savaniuk",
-    phone: "+375292245162",
-    email: "sergsavoniuk@gmail.com",
-    skype: "sergeisavonuik"
-  },
-  {
-    id: 3,
-    name: "Siarhei Savaniuk",
-    phone: "+375292245162",
-    email: "sergsavoniuk@gmail.com",
-    skype: "sergeisavonuik"
-  },
-  {
-    id: 4,
-    name: "Siarhei Savaniuk",
-    phone: "+375292245162",
-    email: "sergsavoniuk@gmail.com",
-    skype: "sergeisavonuik"
-  },
-  {
-    id: 5,
-    name: "Siarhei Savaniuk",
-    phone: "+375292245162",
-    email: "sergsavoniuk@gmail.com",
-    skype: "sergeisavonuik"
-  },
-  {
-    id: 6,
-    name: "Siarhei Savaniuk",
-    phone: "+375292245162",
-    email: "sergsavoniuk@gmail.com",
-    skype: "sergeisavonuik"
+function ContactsList(props) {
+  const user = useAuthContext();
+  const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    contactsService.getContacts(user.uid).then(contacts => {
+      setContacts(
+        contacts.map(({ id, firstName, lastName, phone, email, skype }) => ({
+          id,
+          name: `${firstName} ${lastName}`,
+          phone,
+          email,
+          skype
+        }))
+      );
+      setLoading(false);
+    });
+  }, [user.uid]);
+
+  function handleRemoveContact(docId) {
+    try {
+      contactsService.removeContact(docId);
+      setContacts(contacts => contacts.filter(contact => contact.id !== docId));
+    } catch (error) {}
   }
-];
 
-function ContactsList() {
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <Wrapper>
+      <Title>Contacts List</Title>
       <NewContact>
-        <Link to="/contacts/new">Add Contact</Link>
+        <Link to="/contacts/new">Add Contact +</Link>
       </NewContact>
-      <h1>Contacts List</h1>
       <Grid>
         {contacts.map(({ id, ...rest }) => (
           <ContactCard key={id}>
             <Row css="display: flex; justify-content: flex-end">
               <EditButton
                 imgUrl={`${process.env.PUBLIC_URL}/assets/edit_icon.png`}
+                onClick={() => props.history.push(`/contacts/${id}/edit`)}
               />
               <RemoveButton
                 imgUrl={`${process.env.PUBLIC_URL}/assets/remove_icon.png`}
+                onClick={() => handleRemoveContact(id)}
               />
             </Row>
             <Avatar />
