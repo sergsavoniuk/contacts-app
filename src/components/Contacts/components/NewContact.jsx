@@ -1,22 +1,22 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from 'react';
 
+import contactsService from 'api/contacts';
+import Loader from 'components/Loader';
+import useFormValidation from 'utils/useFormValidation';
+import validateContact from '../utils/validateContact';
 import {
   FormWrapper,
   Input,
   Title,
   SubmitButton,
   Error
-} from "../shared/formControls.components";
-import useFormValidation from "../../utils/useFormValidation";
-import validateContact from "./validateContact";
-import { useAuthContext } from "../Auth/AuthContext";
-import contactsService from "../../api/contacts";
-import { NameIcon } from "./ContactsList.components";
+} from 'components/shared/formControls.components';
+import { useAuthContext } from 'components/Auth';
 
 function NewContact(props) {
   const user = useAuthContext();
 
-  const isEditMode = useMemo(() => props.match.path === "/contacts/:id/edit", [
+  const isEditMode = useMemo(() => props.match.path === '/contacts/:id/edit', [
     props.match.path
   ]);
 
@@ -35,14 +35,15 @@ function NewContact(props) {
     handleSubmit
   } = useFormValidation({
     initialState: {
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      skype: ""
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: '',
+      skype: ''
     },
     validate: validateContact,
-    submit: isEditMode ? updateContact : createContact
+    submit: isEditMode ? updateContact : createContact,
+    redirectAfterSuccess: () => props.history.push('/contacts')
   });
 
   useEffect(() => {
@@ -62,47 +63,37 @@ function NewContact(props) {
   }, [isEditMode, props.match.params.id]);
 
   async function createContact() {
-    try {
-      contactsService.createContact({
-        parentUID: user.uid,
-        firstName,
-        lastName,
-        phone,
-        email,
-        skype
-      });
-      props.history.push("/contacts");
-    } catch (error) {
-      console.error(error);
-    }
+    return await contactsService.createContact({
+      parentUID: user.uid,
+      firstName,
+      lastName,
+      phone,
+      email,
+      skype
+    });
   }
 
   async function updateContact() {
-    try {
-      contactsService.updateContact({
-        id: props.match.params.id,
-        firstName,
-        lastName,
-        phone,
-        email,
-        skype
-      });
-      props.history.push("/contacts");
-    } catch (error) {
-      console.error(error);
-    }
+    return await contactsService.updateContact({
+      id: props.match.params.id,
+      firstName,
+      lastName,
+      phone,
+      email,
+      skype
+    });
   }
 
   return (
     <FormWrapper>
-      <Title>{isEditMode ? "Edit Contact" : "Add Contact"}</Title>
+      <Title>{isEditMode ? 'Edit Contact' : 'Add Contact'}</Title>
       <form onSubmit={handleSubmit}>
         <>
           <Input
-            name="firstName"
+            name='firstName'
             value={firstName}
             onChange={handleChange}
-            placeholder="First name"
+            placeholder='First name'
             disabled={isSubmitting}
             error={firstNameErr}
           />
@@ -110,10 +101,10 @@ function NewContact(props) {
         </>
         <>
           <Input
-            name="lastName"
+            name='lastName'
             value={lastName}
             onChange={handleChange}
-            placeholder="Last name"
+            placeholder='Last name'
             disabled={isSubmitting}
             error={lastNameErr}
           />
@@ -121,10 +112,10 @@ function NewContact(props) {
         </>
         <>
           <Input
-            name="phone"
+            name='phone'
             value={phone}
             onChange={handleChange}
-            placeholder="Phone number"
+            placeholder='Phone number'
             disabled={isSubmitting}
             error={phoneErr}
           />
@@ -132,10 +123,10 @@ function NewContact(props) {
         </>
         <>
           <Input
-            name="email"
+            name='email'
             value={email}
             onChange={handleChange}
-            placeholder="Email"
+            placeholder='Email'
             disabled={isSubmitting}
             error={emailErr}
           />
@@ -143,16 +134,18 @@ function NewContact(props) {
         </>
         <>
           <Input
-            name="skype"
+            name='skype'
             value={skype}
             onChange={handleChange}
-            placeholder="Skype"
+            placeholder='Skype'
             disabled={isSubmitting}
             error={skypeErr}
           />
           {skypeErr && <Error>{skypeErr}</Error>}
         </>
-        <SubmitButton>Submit</SubmitButton>
+        <SubmitButton disabled={isSubmitting}>
+          {isSubmitting ? <Loader alignment='0 auto' size='30' /> : 'Submit'}
+        </SubmitButton>
       </form>
     </FormWrapper>
   );

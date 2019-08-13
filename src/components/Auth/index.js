@@ -1,2 +1,3 @@
-export { default } from "./Auth";
-export { AuthProvider, useAuthContext } from "./AuthContext";
+export { default } from './components/Auth';
+export { AuthProvider, useAuthContext } from './components/AuthContext';
+export { validateEmail } from './utils/validateAuth';

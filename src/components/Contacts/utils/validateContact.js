@@ -1,4 +1,4 @@
-import { validateEmail } from "../Auth/validateAuth";
+import { validateEmail } from 'components/Auth';
 
 export function validatePhone(phone) {
   let error = null;
@@ -13,11 +13,11 @@ export function isRequired({ label, value }) {
 }
 
 export function validateFirstName(firstName) {
-  return isRequired({ label: "First name", value: firstName });
+  return isRequired({ label: 'First name', value: firstName });
 }
 
 export function validateLastName(lastName) {
-  return isRequired({ label: "Last name", value: lastName });
+  return isRequired({ label: 'Last name', value: lastName });
 }
 
 export default function validateContact({ firstName, lastName, phone, email }) {

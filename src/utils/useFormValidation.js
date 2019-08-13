@@ -1,9 +1,9 @@
-import { useReducer } from "react";
+import { useReducer } from 'react';
 
-const INPUT_CHANGE = "INPUT_CHANGE";
-const SET_INITIAL_VALUES = "SET_INITIAL_VALUES";
-const FORM_SUBMITTING = "FORM_SUBMITTING";
-const SET_ERRORS = "SET_ERRORS";
+const INPUT_CHANGE = 'INPUT_CHANGE';
+const SET_INITIAL_VALUES = 'SET_INITIAL_VALUES';
+const FORM_SUBMITTING = 'FORM_SUBMITTING';
+const SET_ERRORS = 'SET_ERRORS';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -49,7 +49,12 @@ function init(initialState) {
   };
 }
 
-export default function useFormValidation({ initialState, validate, submit }) {
+export default function useFormValidation({
+  initialState,
+  validate,
+  submit,
+  redirectAfterSuccess
+}) {
   const [state, dispatch] = useReducer(reducer, initialState, init);
 
   function handleChange(event) {
@@ -71,7 +76,7 @@ export default function useFormValidation({ initialState, validate, submit }) {
     });
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     dispatch({ type: FORM_SUBMITTING });
@@ -85,7 +90,21 @@ export default function useFormValidation({ initialState, validate, submit }) {
           errors: undefined
         }
       });
-      submit();
+
+      try {
+        await submit();
+        redirectAfterSuccess();
+      } catch (error) {
+        console.error('Server Error', error);
+        dispatch({
+          type: SET_ERRORS,
+          payload: {
+            errors: {
+              serverError: error.message
+            }
+          }
+        });
+      }
     } else if (errors) {
       dispatch({
         type: SET_ERRORS,

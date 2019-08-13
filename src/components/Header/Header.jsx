@@ -1,31 +1,30 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
+import React from 'react';
+import { withRouter } from 'react-router-dom';
 
-import authService from "../../api/auth";
+import authService from 'api/auth';
 import {
   Wrapper,
   Logo,
   HeaderTitle,
   Link,
-  Logout,
   LogoutButton
-} from "./Header.components";
-import { useAuthContext } from "../Auth/";
+} from './Header.components';
+import { useAuthContext } from 'components/Auth';
 
 export function Header(props) {
   const user = useAuthContext();
 
-  const isAuthPage = ["/login", "/register"].includes(props.location.pathname);
+  const isAuthPage = ['/login', '/register'].includes(props.location.pathname);
 
   function handleLogout() {
     authService.logout();
-    props.history.push("/login");
+    props.history.push('/login');
   }
 
   return (
     !isAuthPage && (
       <Wrapper>
-        <Link to="/contacts">
+        <Link to='/contacts'>
           <Logo />
           <HeaderTitle>Contacts Keeper</HeaderTitle>
         </Link>

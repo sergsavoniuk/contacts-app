@@ -1,7 +1,7 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
 
-import { useAuthContext } from "../Auth";
+import { useAuthContext } from 'components/Auth';
 
 function ProtectedRoute({ component: Component, ...rest }) {
   const user = useAuthContext();
@@ -10,7 +10,7 @@ function ProtectedRoute({ component: Component, ...rest }) {
     <Route
       {...rest}
       render={props =>
-        user.isAuthorized ? <Component {...props} /> : <Redirect to="/login" />
+        user.isAuthorized ? <Component {...props} /> : <Redirect to='/login' />
       }
     />
   );

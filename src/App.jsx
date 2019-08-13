@@ -1,16 +1,10 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
-import { createGlobalStyle } from "styled-components";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
 
-import Header from "./components/Header";
-import { AuthProvider } from "./components/Auth";
-import routes from "./components/routes";
-import ProtectedRoute from "./components/routes/ProtectedRoute";
+import Header from './components/Header';
+import Routes from './components/routes';
+import { AuthProvider } from './components/Auth';
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -35,16 +29,7 @@ function App() {
       <AuthProvider>
         <Router>
           <Header />
-          <Switch>
-            <Route exact path="/" render={() => <Redirect to="/login" />} />
-            {routes.map(({ component, key, protectedRoute, ...rest }) =>
-              protectedRoute ? (
-                <ProtectedRoute key={key} component={component} {...rest} />
-              ) : (
-                <Route key={key} component={component} {...rest} />
-              )
-            )}
-          </Switch>
+          <Routes />
         </Router>
       </AuthProvider>
     </>

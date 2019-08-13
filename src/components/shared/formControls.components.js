@@ -1,5 +1,5 @@
-import styled, { css } from "styled-components";
-import { Link } from "react-router-dom";
+import styled, { css } from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const FormWrapper = styled.div`
   width: 400px;
@@ -77,4 +77,11 @@ export const Error = styled.span`
   display: inline-block;
   color: #d01c10;
   padding-bottom: 10px;
+`;
+
+export const ErrorAlert = styled.div`
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #d01c10;
+  background-color: #ffe7e6;
 `;
