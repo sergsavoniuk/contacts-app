@@ -10,7 +10,7 @@ import {
 } from "./Auth.components";
 import useFormValidation from "./useFormValidation";
 
-import Loader from "../Loader/Loader";
+import Loader from "../Loader";
 import authService from "../../api/auth";
 import { useAuthContext } from "./AuthContext";
 
