@@ -1,7 +1,7 @@
 import { useReducer, useEffect } from "react";
 
 const INPUT_CHANGE = "INPUT_CHANGE";
-const FORM_SUBMIT = "FORM_SUBMIT";
+const FORM_SUBMITTING = "FORM_SUBMITTING";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -12,6 +12,12 @@ function reducer(state, action) {
           ...state.values,
           [action.payload.name]: action.payload.value
         }
+      };
+    }
+    case FORM_SUBMITTING: {
+      return {
+        ...state,
+        isSubmitting: true
       };
     }
     default:
@@ -46,6 +52,7 @@ export default function useFormValidation({
 
   function handleSubmit(event) {
     event.preventDefault();
+    dispatch({ type: FORM_SUBMITTING });
     authenticate();
   }
 

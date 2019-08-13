@@ -1,5 +1,6 @@
 import Auth from "../Auth";
 import ContactsList from "../Contacts/ContactsList";
+import NewContact from "../Contacts/NewContact";
 
 const routes = [
   {
@@ -18,7 +19,15 @@ const routes = [
     path: "/contacts",
     key: "/contacts",
     exact: true,
+    protectedRoute: true,
     component: ContactsList
+  },
+  {
+    path: "/contacts/new",
+    key: "/contacts/new",
+    exact: true,
+    protectedRoute: true,
+    component: NewContact
   }
 ];
 

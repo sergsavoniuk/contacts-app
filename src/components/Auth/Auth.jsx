@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 
 import {
   Wrapper,
@@ -9,9 +10,12 @@ import {
 } from "./Auth.components";
 import useFormValidation from "./useFormValidation";
 
+import Loader from "../Loader/Loader";
 import authService from "../../api/auth";
+import { useAuthContext } from "./AuthContext";
 
 function Auth(props) {
+  const user = useAuthContext();
   const [hasAccount, setHasAccount] = useState(true);
 
   useEffect(() => {
@@ -24,7 +28,6 @@ function Auth(props) {
       hasAccount
         ? await authService.login({ email, password })
         : await authService.register({ name, email, password });
-      console.log("Successfully registered");
       props.history.push("/contacts");
     } catch (err) {
       console.error("Authentication Error", err);
@@ -48,12 +51,19 @@ function Auth(props) {
     authenticate
   });
 
+  if (user.isAuthorized) {
+    return <Redirect to="/contacts" />;
+  } else if (user.isAuthorized === null) {
+    return <Loader />;
+  }
+
   return (
     <Wrapper>
       <Title>{hasAccount ? "Login" : "Register"}</Title>
       <form onSubmit={handleSubmit}>
         {!hasAccount && (
           <Input
+            disabled={isSubmitting}
             name="name"
             value={values.name}
             onChange={handleChange}
@@ -62,24 +72,28 @@ function Auth(props) {
         )}
 
         <Input
+          disabled={isSubmitting}
           name="email"
           value={values.email}
           onChange={handleChange}
           placeholder="Enter email"
         />
         <Input
+          disabled={isSubmitting}
           name="password"
           value={values.password}
           onChange={handleChange}
           type="password"
           placeholder="Enter password"
         />
-        <SubmitButton>Submit</SubmitButton>
-        {hasAccount ? (
-          <Link to="/register">need to create an account?</Link>
-        ) : (
-          <Link to="/login">already have an account?</Link>
-        )}
+        <SubmitButton disabled={isSubmitting}>
+          {isSubmitting ? <Loader alignment="0 auto" size="30" /> : "Submit"}
+        </SubmitButton>
+        {hasAccount
+          ? !isSubmitting && (
+              <Link to="/register">need to create an account?</Link>
+            )
+          : !isSubmitting && <Link to="/login">already have an account?</Link>}
       </form>
     </Wrapper>
   );

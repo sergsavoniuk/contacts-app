@@ -7,7 +7,18 @@ class AuthService {
   }
 
   async register({ name, email, password }) {
-    await firebase.auth.createUserWithEmailAndPassword(email, password);
+    const newUser = await firebase.auth.createUserWithEmailAndPassword(
+      email,
+      password
+    );
+
+    return await newUser.user.updateProfile({
+      displayName: name
+    });
+  }
+
+  async logout() {
+    await firebase.auth.signOut();
   }
 }
 

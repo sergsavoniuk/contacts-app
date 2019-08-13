@@ -48,6 +48,11 @@ export const SubmitButton = styled.button`
     cursor: pointer;
     background: #6aa220;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    background: #6aa220;
+  }
 `;
 
 export const StyledLink = styled(Link)`
