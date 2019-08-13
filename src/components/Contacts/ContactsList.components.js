@@ -42,7 +42,7 @@ export const ContactCard = styled.div`
   min-height: 200px;
   padding: 10px;
   padding-top: 0;
-  border: 1px solid black;
+  border: 1px solid #e2e2e2;
 `;
 
 export const Row = styled.div`

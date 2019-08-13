@@ -1,4 +1,4 @@
-function validateEmail(email) {
+export function validateEmail(email) {
   let error = null;
 
   if (!email) {
@@ -10,7 +10,7 @@ function validateEmail(email) {
   return error;
 }
 
-function validatePassword(password) {
+export function validatePassword(password) {
   let error = null;
 
   if (!password) {

@@ -4,9 +4,11 @@ import {
   FormWrapper,
   Input,
   Title,
-  SubmitButton
-} from "./ContactsList.components";
+  SubmitButton,
+  Error
+} from "../shared/formControls.components";
 import useFormValidation from "../../utils/useFormValidation";
+import validateContact from "./validateContact";
 
 function NewContact() {
   const {
@@ -29,7 +31,7 @@ function NewContact() {
       email: "",
       skype: ""
     },
-    validate: () => {},
+    validate: validateContact,
     authenticate: () => {}
   });
 
@@ -37,46 +39,61 @@ function NewContact() {
     <FormWrapper>
       <Title>Add Contact</Title>
       <form onSubmit={handleSubmit}>
-        <Input
-          name="firstName"
-          value={firstName}
-          onChange={handleChange}
-          placeholder="First name"
-          disabled={isSubmitting}
-          error={firstNameErr}
-        />
-        <Input
-          name="lastName"
-          value={lastName}
-          onChange={handleChange}
-          placeholder="Last name"
-          disabled={isSubmitting}
-          error={lastNameErr}
-        />
-        <Input
-          name="phone"
-          value={phone}
-          onChange={handleChange}
-          placeholder="Phone number"
-          disabled={isSubmitting}
-          error={phoneErr}
-        />
-        <Input
-          name="email"
-          value={email}
-          onChange={handleChange}
-          placeholder="Email"
-          disabled={isSubmitting}
-          error={emailErr}
-        />
-        <Input
-          name="skype"
-          value={skype}
-          onChange={handleChange}
-          placeholder="Skype"
-          disabled={isSubmitting}
-          error={skypeErr}
-        />
+        <>
+          <Input
+            name="firstName"
+            value={firstName}
+            onChange={handleChange}
+            placeholder="First name"
+            disabled={isSubmitting}
+            error={firstNameErr}
+          />
+          {firstNameErr && <Error>{firstNameErr}</Error>}
+        </>
+        <>
+          <Input
+            name="lastName"
+            value={lastName}
+            onChange={handleChange}
+            placeholder="Last name"
+            disabled={isSubmitting}
+            error={lastNameErr}
+          />
+          {lastNameErr && <Error>{lastNameErr}</Error>}
+        </>
+        <>
+          <Input
+            name="phone"
+            value={phone}
+            onChange={handleChange}
+            placeholder="Phone number"
+            disabled={isSubmitting}
+            error={phoneErr}
+          />
+          {phoneErr && <Error>{phoneErr}</Error>}
+        </>
+        <>
+          <Input
+            name="email"
+            value={email}
+            onChange={handleChange}
+            placeholder="Email"
+            disabled={isSubmitting}
+            error={emailErr}
+          />
+          {emailErr && <Error>{emailErr}</Error>}
+        </>
+        <>
+          <Input
+            name="skype"
+            value={skype}
+            onChange={handleChange}
+            placeholder="Skype"
+            disabled={isSubmitting}
+            error={skypeErr}
+          />
+          {skypeErr && <Error>{skypeErr}</Error>}
+        </>
         <SubmitButton>Submit</SubmitButton>
       </form>
     </FormWrapper>
