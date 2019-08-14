@@ -1,5 +1,25 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Introduction
+
+Contact manager app that allows users to login/register to store contact information such as name, phone number, email and skype.
+
+## Features
+
+- **React** — 16.8 (with hooks and context)
+- **React Router** — declarative routing
+- **Styled Components** — styling components using tagged template literals
+- **Firebase** — authentication, realtime db, hosting
+
+
+## Getting started
+
+1. Clone this repo using `git clone https://github.com/sergsavoniuk/contacts-app.git <YOUR_PROJECT_NAME>`<br />
+2. Move to the appropriate directory: `cd <YOUR_PROJECT_NAME>`.<br />
+3. Run `yarn` or `npm install` to install dependencies.<br />
+4. Open the file `config.js` and insert your firebase config. To get config, you should [create](https://console.firebase.google.com/) a new app and choose authentication providers (email, google, fecebook).
+5. Run `yarn` or `npm start` to see the example app at `http://localhost:3000`.
+
 ## Available Scripts
 
 In the project directory, you can run:
