@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Redirect } from "react-router-dom";
 
+import SocialLinks from "./SocialLinks";
 import useFormValidation from "utils/useFormValidation";
 import validateAuth from "../utils/validateAuth";
 import Loader from "components/Loader";
@@ -13,7 +14,7 @@ import {
   Error,
   ErrorAlert
 } from "components/shared/formControls.components";
-import { Link } from "./Auth.components";
+import { Label, Link } from "./Auth.components";
 import { useAuthContext } from "./AuthContext";
 
 const INITIAL_STATE = {
@@ -60,6 +61,10 @@ function Auth(props) {
       : await authService.register({ name, email, password });
   }
 
+  async function handleSignInThroughSocials(providerName) {
+    await authService.authenticateThroughSocials(providerName);
+  }
+
   const user = useAuthContext();
 
   if (user.isAuthorized) {
@@ -72,7 +77,9 @@ function Auth(props) {
     <FormWrapper>
       <Title>{hasAccount ? "Login" : "Register"}</Title>
       {serverError && <ErrorAlert>{serverError}</ErrorAlert>}
+      <SocialLinks onSignIn={handleSignInThroughSocials} />
       <form onSubmit={handleSubmit}>
+        <Label>or through email</Label>
         {!hasAccount && (
           <Input
             name="name"

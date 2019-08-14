@@ -16,6 +16,14 @@ class AuthService {
     });
   }
 
+  async authenticateThroughSocials(providerName) {
+    return firebase.auth.signInWithPopup(
+      providerName === "google"
+        ? firebase.googleProvider
+        : firebase.facebookProvider
+    );
+  }
+
   async logout() {
     await firebase.auth.signOut();
   }

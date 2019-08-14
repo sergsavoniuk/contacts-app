@@ -1,11 +1,10 @@
-import styled, { css } from 'styled-components';
-import { Link } from 'react-router-dom';
+import styled, { css } from "styled-components";
+import { Link } from "react-router-dom";
 
 export const FormWrapper = styled.div`
   width: 400px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   margin: 100px auto;
   padding: 20px 40px;
   border: 1px solid #e2e2e2;
@@ -15,7 +14,7 @@ export const FormWrapper = styled.div`
 export const Title = styled.h2`
   font-weight: 700;
   font-size: 36px;
-  line-height: 1.1;
+  margin: 20px 0;
 `;
 
 export const Input = styled.input`
