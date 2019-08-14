@@ -4,6 +4,7 @@ import contactsService from "api/contacts";
 import Loader from "components/Loader";
 import useFormValidation from "utils/useFormValidation";
 import validateContact from "../utils/validateContact";
+import ROUTES from "constants/routes";
 import {
   FormWrapper,
   Input,
@@ -16,7 +17,7 @@ import { useAuthContext } from "components/Auth";
 function NewContact(props) {
   const user = useAuthContext();
 
-  const isEditMode = useMemo(() => props.match.path === "/contacts/:id/edit", [
+  const isEditMode = useMemo(() => props.match.path === ROUTES.EditContact, [
     props.match.path
   ]);
 
@@ -43,7 +44,7 @@ function NewContact(props) {
     },
     validate: validateContact,
     submit: isEditMode ? updateContact : createContact,
-    redirectAfterSuccess: () => props.history.push("/contacts")
+    redirectAfterSuccess: () => props.history.push(ROUTES.ContactsList)
   });
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import React from "react";
 
+import PROVIDERS from "constants/providers";
 import {
   Wrapper,
   LinksContainer,
@@ -21,10 +22,10 @@ function SocialLinks({ onSignIn }) {
     <Wrapper>
       <Label>Through social networks</Label>
       <LinksContainer>
-        <GoogleButton name="google" onClick={handleSignIn}>
+        <GoogleButton name={PROVIDERS.Google} onClick={handleSignIn}>
           <GoogleIcon />
         </GoogleButton>
-        <FacebookButton name="facebook" onClick={handleSignIn}>
+        <FacebookButton name={PROVIDERS.Facebook} onClick={handleSignIn}>
           <FacebookIcon />
         </FacebookButton>
       </LinksContainer>

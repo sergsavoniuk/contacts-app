@@ -1,10 +1,10 @@
-import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
 
-import Header from './components/Header';
-import Routes from './components/routes';
-import { AuthProvider } from './components/Auth';
+import Header from "./components/Header";
+import Routes from "./components/routes";
+import { AuthProvider } from "./components/Auth";
 
 const GlobalStyles = createGlobalStyle`
   * {

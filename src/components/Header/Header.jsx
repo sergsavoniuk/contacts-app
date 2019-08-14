@@ -2,8 +2,8 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 
 import firebase from "../../firebase/firebase";
-
 import authService from "api/auth";
+import ROUTES from "constants/routes";
 import {
   Wrapper,
   Logo,
@@ -18,17 +18,19 @@ import { useAuthContext } from "components/Auth";
 export function Header(props) {
   const user = useAuthContext();
 
-  const isAuthPage = ["/login", "/register"].includes(props.location.pathname);
+  const isAuthPage = [ROUTES.Root, ROUTES.Login, ROUTES.Register].includes(
+    props.location.pathname
+  );
 
   function handleLogout() {
     authService.logout();
-    props.history.push("/login");
+    props.history.push(ROUTES.Login);
   }
 
   return (
     !isAuthPage && (
       <Wrapper>
-        <Link to="/contacts">
+        <Link to={ROUTES.ContactsList}>
           <Logo />
           <HeaderTitle>Contacts Keeper</HeaderTitle>
         </Link>

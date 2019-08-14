@@ -6,6 +6,7 @@ import useFormValidation from "utils/useFormValidation";
 import validateAuth from "../utils/validateAuth";
 import Loader from "components/Loader";
 import authService from "api/auth";
+import ROUTES from "constants/routes";
 import {
   FormWrapper,
   Input,
@@ -38,12 +39,12 @@ function Auth(props) {
     initialState: INITIAL_STATE,
     validate: validateAuth,
     submit: authenticate,
-    redirectAfterSuccess: () => props.history.push("/contacts")
+    redirectAfterSuccess: () => props.history.push(ROUTES.ContactsList)
   });
 
   useEffect(() => {
     const currentPathname = props.location.pathname;
-    setHasAccount(currentPathname === "/login");
+    setHasAccount(currentPathname === ROUTES.Login);
 
     if (
       prevPathname.current !== null &&
@@ -68,7 +69,7 @@ function Auth(props) {
   const user = useAuthContext();
 
   if (user.isAuthorized) {
-    return <Redirect to="/contacts" />;
+    return <Redirect to={ROUTES.ContactsList} />;
   } else if (user.isAuthorized === null) {
     return <Loader />;
   }
@@ -117,9 +118,11 @@ function Auth(props) {
         </SubmitButton>
         {hasAccount
           ? !isSubmitting && (
-              <Link to="/register">need to create an account?</Link>
+              <Link to={ROUTES.Register}>need to create an account?</Link>
             )
-          : !isSubmitting && <Link to="/login">already have an account?</Link>}
+          : !isSubmitting && (
+              <Link to={ROUTES.Login}>already have an account?</Link>
+            )}
       </form>
     </FormWrapper>
   );

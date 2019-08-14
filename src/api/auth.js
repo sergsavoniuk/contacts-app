@@ -1,5 +1,7 @@
 import firebase from "../firebase/firebase";
 
+import PROVIDERS from "constants/providers";
+
 class AuthService {
   async login({ email, password }) {
     return firebase.auth.signInWithEmailAndPassword(email, password);
@@ -18,7 +20,7 @@ class AuthService {
 
   async authenticateThroughSocials(providerName) {
     return firebase.auth.signInWithPopup(
-      providerName === "google"
+      providerName === PROVIDERS.Google
         ? firebase.googleProvider
         : firebase.facebookProvider
     );

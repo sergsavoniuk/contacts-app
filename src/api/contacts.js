@@ -1,17 +1,19 @@
-import firebase from '../firebase/firebase';
+import firebase from "../firebase/firebase";
+
+const CONTACTS_COLLECTION = "contacts";
 
 class ContactsService {
   async createContact(contact) {
     return firebase.db
-      .collection('contacts')
+      .collection(CONTACTS_COLLECTION)
       .add({ ...contact, createAt: Date.now() });
   }
 
   async getContacts(userId) {
     const querySnapshot = await firebase.db
-      .collection('contacts')
-      .where('parentUID', '==', userId)
-      .orderBy('createAt', 'asc')
+      .collection(CONTACTS_COLLECTION)
+      .where("parentUID", "==", userId)
+      .orderBy("createAt", "asc")
       .get();
 
     const contacts = [];
@@ -22,7 +24,7 @@ class ContactsService {
 
   async getContact(docId) {
     const contact = await firebase.db
-      .collection('contacts')
+      .collection(CONTACTS_COLLECTION)
       .doc(docId)
       .get();
     return { id: contact.id, ...contact.data() };
@@ -30,14 +32,14 @@ class ContactsService {
 
   async removeContact(docId) {
     return await firebase.db
-      .collection('contacts')
+      .collection(CONTACTS_COLLECTION)
       .doc(docId)
       .delete();
   }
 
   async updateContact({ id: docId, ...rest }) {
     return firebase.db
-      .collection('contacts')
+      .collection(CONTACTS_COLLECTION)
       .doc(docId)
       .set(rest, { merge: true });
   }

@@ -1,21 +1,22 @@
-import React, { lazy, Suspense } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { lazy, Suspense } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
 
-import Loader from 'components/Loader';
-import Auth, { useAuthContext } from 'components/Auth';
-import ProtectedRoute from './ProtectedRoute';
+import Loader from "components/Loader";
+import Auth, { useAuthContext } from "components/Auth";
+import ProtectedRoute from "./ProtectedRoute";
+import ROUTES from "constants/routes";
 
 const ContactsList = lazy(() =>
-  import(/* webpackChunkName: "ContactsList" */ 'components/Contacts')
+  import(/* webpackChunkName: "ContactsList" */ "components/Contacts")
 );
 
 const NewContact = lazy(() =>
   import(
-    /* webpackChunkName: "NewContact" */ 'components/Contacts/components/NewContact'
+    /* webpackChunkName: "NewContact" */ "components/Contacts/components/NewContact"
   )
 );
 
-function Routes() {
+function Routes(props) {
   const user = useAuthContext();
 
   if (user.isAuthorized === null) {
@@ -27,17 +28,23 @@ function Routes() {
       <Switch>
         <Route
           exact
-          path='/'
+          path={ROUTES.Root}
           render={() => {
-            const redirectTo = user.isAuthorized ? '/contacts' : '/login';
+            const redirectTo = user.isAuthorized
+              ? ROUTES.ContactsList
+              : ROUTES.Login;
             return <Redirect to={redirectTo} />;
           }}
         />
-        <Route path='/login' component={Auth} />
-        <Route path='/register' component={Auth} />
-        <ProtectedRoute exact path='/contacts' component={ContactsList} />
-        <ProtectedRoute path='/contacts/new' component={NewContact} />
-        <ProtectedRoute path='/contacts/:id/edit' component={NewContact} />
+        <Route path={ROUTES.Login} component={Auth} />
+        <Route path={ROUTES.Register} component={Auth} />
+        <ProtectedRoute
+          exact
+          path={ROUTES.ContactsList}
+          component={ContactsList}
+        />
+        <ProtectedRoute path={ROUTES.NewContact} component={NewContact} />
+        <ProtectedRoute path={ROUTES.EditContact} component={NewContact} />
       </Switch>
     </Suspense>
   );

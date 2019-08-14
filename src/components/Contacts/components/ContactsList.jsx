@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import 'styled-components/macro';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "styled-components/macro";
 
+import contactsService from "api/contacts";
+import ROUTES from "constants/routes";
+import Loader from "components/Loader";
 import {
   Wrapper,
   NewContact,
@@ -17,10 +20,10 @@ import {
   EditButton,
   RemoveButton,
   Title
-} from './ContactsList.components';
-import contactsService from 'api/contacts';
-import { useAuthContext } from 'components/Auth';
-import Loader from 'components/Loader';
+} from "./ContactsList.components";
+import { useAuthContext } from "components/Auth";
+
+const ASSETS_PATH = `${process.env.PUBLIC_URL}/assets`;
 
 function ContactsList(props) {
   const user = useAuthContext();
@@ -56,31 +59,31 @@ function ContactsList(props) {
     <Wrapper>
       <Title>Contacts List</Title>
       <NewContact>
-        <Link to='/contacts/new'>Add Contact +</Link>
+        <Link to={ROUTES.NewContact}>Add Contact +</Link>
       </NewContact>
       <Grid>
         {contacts.map(({ id, ...rest }) => (
           <ContactCard key={id}>
-            <Row css='display: flex; justify-content: flex-end'>
+            <Row css="display: flex; justify-content: flex-end">
               <EditButton
-                imgUrl={`${process.env.PUBLIC_URL}/assets/edit_icon.png`}
+                imgUrl={`${ASSETS_PATH}/edit_icon.png`}
                 onClick={() => props.history.push(`/contacts/${id}/edit`)}
               />
               <RemoveButton
-                imgUrl={`${process.env.PUBLIC_URL}/assets/remove_icon.png`}
+                imgUrl={`${ASSETS_PATH}/remove_icon.png`}
                 onClick={() => handleRemoveContact(id)}
               />
             </Row>
             <Avatar />
             {Object.keys(rest).map(key => (
               <Row key={key}>
-                {key === 'name' ? (
+                {key === "name" ? (
                   <NameIcon />
-                ) : key === 'phone' ? (
+                ) : key === "phone" ? (
                   <PhoneIcon />
-                ) : key === 'email' ? (
+                ) : key === "email" ? (
                   <EmailIcon />
-                ) : key === 'skype' ? (
+                ) : key === "skype" ? (
                   <SkypeIcon />
                 ) : null}
                 <Text>{rest[key]}</Text>
