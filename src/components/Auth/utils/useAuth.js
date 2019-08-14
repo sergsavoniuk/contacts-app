@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import firebase from '../../../firebase/firebase'
+import { useState, useEffect } from "react";
+import firebase from "../../../firebase/firebase";
 
 export default function useAuth() {
   const [user, setUser] = useState({ isAuthorized: null });

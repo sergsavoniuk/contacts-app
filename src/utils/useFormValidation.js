@@ -1,9 +1,9 @@
-import { useReducer } from 'react';
+import { useReducer } from "react";
 
-const INPUT_CHANGE = 'INPUT_CHANGE';
-const SET_INITIAL_VALUES = 'SET_INITIAL_VALUES';
-const FORM_SUBMITTING = 'FORM_SUBMITTING';
-const SET_ERRORS = 'SET_ERRORS';
+const INPUT_CHANGE = "INPUT_CHANGE";
+const SET_INITIAL_VALUES = "SET_INITIAL_VALUES";
+const FORM_SUBMITTING = "FORM_SUBMITTING";
+const SET_ERRORS = "SET_ERRORS";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -19,7 +19,8 @@ function reducer(state, action) {
     case SET_INITIAL_VALUES: {
       return {
         ...state,
-        values: action.payload.values
+        values: action.payload.values,
+        errors: undefined
       };
     }
     case FORM_SUBMITTING: {
@@ -95,7 +96,7 @@ export default function useFormValidation({
         await submit();
         redirectAfterSuccess();
       } catch (error) {
-        console.error('Server Error', error);
+        console.error("Server Error", error);
         dispatch({
           type: SET_ERRORS,
           payload: {

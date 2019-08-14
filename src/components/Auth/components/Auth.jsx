@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react";
+import { Redirect } from "react-router-dom";
 
-import useFormValidation from 'utils/useFormValidation';
-import validateAuth from '../utils/validateAuth';
-import Loader from 'components/Loader';
-import authService from 'api/auth';
+import useFormValidation from "utils/useFormValidation";
+import validateAuth from "../utils/validateAuth";
+import Loader from "components/Loader";
+import authService from "api/auth";
 import {
   FormWrapper,
   Input,
@@ -12,16 +12,47 @@ import {
   Title,
   Error,
   ErrorAlert
-} from 'components/shared/formControls.components';
-import { Link } from './Auth.components';
-import { useAuthContext } from './AuthContext';
+} from "components/shared/formControls.components";
+import { Link } from "./Auth.components";
+import { useAuthContext } from "./AuthContext";
+
+const INITIAL_STATE = {
+  name: "",
+  email: "",
+  password: ""
+};
 
 function Auth(props) {
+  const prevPathname = useRef(null);
   const [hasAccount, setHasAccount] = useState(true);
 
+  const {
+    values: { name, email, password },
+    errors: { email: emailErr, password: passwordErr, serverError } = {},
+    isSubmitting,
+    setInitialValues,
+    handleChange,
+    handleSubmit
+  } = useFormValidation({
+    initialState: INITIAL_STATE,
+    validate: validateAuth,
+    submit: authenticate,
+    redirectAfterSuccess: () => props.history.push("/contacts")
+  });
+
   useEffect(() => {
-    setHasAccount(props.location.pathname === '/login');
-  }, [props.location.pathname]);
+    const currentPathname = props.location.pathname;
+    setHasAccount(currentPathname === "/login");
+
+    if (
+      prevPathname.current !== null &&
+      prevPathname.current !== currentPathname
+    ) {
+      setInitialValues(INITIAL_STATE);
+    }
+
+    prevPathname.current = currentPathname;
+  }, [props.location.pathname, setInitialValues]);
 
   async function authenticate() {
     hasAccount
@@ -29,51 +60,34 @@ function Auth(props) {
       : await authService.register({ name, email, password });
   }
 
-  const {
-    values: { name, email, password },
-    errors: { email: emailErr, password: passwordErr, serverError } = {},
-    isSubmitting,
-    handleChange,
-    handleSubmit
-  } = useFormValidation({
-    initialState: {
-      name: '',
-      email: '',
-      password: ''
-    },
-    validate: validateAuth,
-    submit: authenticate,
-    redirectAfterSuccess: () => props.history.push('/contacts')
-  });
-
   const user = useAuthContext();
 
   if (user.isAuthorized) {
-    return <Redirect to='/contacts' />;
+    return <Redirect to="/contacts" />;
   } else if (user.isAuthorized === null) {
     return <Loader />;
   }
 
   return (
     <FormWrapper>
-      <Title>{hasAccount ? 'Login' : 'Register'}</Title>
+      <Title>{hasAccount ? "Login" : "Register"}</Title>
       {serverError && <ErrorAlert>{serverError}</ErrorAlert>}
       <form onSubmit={handleSubmit}>
         {!hasAccount && (
           <Input
-            name='name'
+            name="name"
             value={name}
             onChange={handleChange}
-            placeholder='Enter name'
+            placeholder="Enter name"
             disabled={isSubmitting}
           />
         )}
         <>
           <Input
-            name='email'
+            name="email"
             value={email}
             onChange={handleChange}
-            placeholder='Enter email'
+            placeholder="Enter email"
             disabled={isSubmitting}
             error={emailErr}
           />
@@ -81,24 +95,24 @@ function Auth(props) {
         </>
         <>
           <Input
-            name='password'
+            name="password"
             value={password}
             onChange={handleChange}
-            type='password'
-            placeholder='Enter password'
+            type="password"
+            placeholder="Enter password"
             disabled={isSubmitting}
             error={passwordErr}
           />
           {passwordErr && <Error>{passwordErr}</Error>}
         </>
         <SubmitButton disabled={isSubmitting}>
-          {isSubmitting ? <Loader alignment='0 auto' size='30' /> : 'Submit'}
+          {isSubmitting ? <Loader alignment="0 auto" size="30" /> : "Submit"}
         </SubmitButton>
         {hasAccount
           ? !isSubmitting && (
-              <Link to='/register'>need to create an account?</Link>
+              <Link to="/register">need to create an account?</Link>
             )
-          : !isSubmitting && <Link to='/login'>already have an account?</Link>}
+          : !isSubmitting && <Link to="/login">already have an account?</Link>}
       </form>
     </FormWrapper>
   );

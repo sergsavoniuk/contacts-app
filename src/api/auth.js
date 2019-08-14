@@ -2,7 +2,7 @@ import firebase from "../firebase/firebase";
 
 class AuthService {
   async login({ email, password }) {
-    return await firebase.auth.signInWithEmailAndPassword(email, password);
+    return firebase.auth.signInWithEmailAndPassword(email, password);
   }
 
   async register({ name, email, password }) {
@@ -11,7 +11,7 @@ class AuthService {
       password
     );
 
-    return await newUser.user.updateProfile({
+    return newUser.user.updateProfile({
       displayName: name
     });
   }

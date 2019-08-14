@@ -1,6 +1,8 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
+import firebase from "../../firebase/firebase";
+
 import authService from "api/auth";
 import {
   Wrapper,
@@ -31,7 +33,11 @@ export function Header(props) {
           <HeaderTitle>Contacts Keeper</HeaderTitle>
         </Link>
         <Box>
-          <Username>{user.name}</Username>
+          <Username>
+            {user.name ||
+              (firebase.auth.currentUser &&
+                firebase.auth.currentUser.displayName)}
+          </Username>
           <LogoutButton
             imgUrl={`${process.env.PUBLIC_URL}/assets/logout_icon.png`}
             onClick={handleLogout}
