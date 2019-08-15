@@ -9,6 +9,11 @@ export const FormWrapper = styled.div`
   padding: 20px 40px;
   border: 1px solid #e2e2e2;
   border-radius: 5px;
+
+  @media (max-width: 424px) {
+    width: 300px;
+    padding: 20px 10px;
+  }
 `;
 
 export const Title = styled.h2`

@@ -6,6 +6,10 @@ export const Wrapper = styled.div`
   margin: 50px auto;
   padding: 10px;
   border: 1px solid #e2e2e2;
+
+  @media (max-width: 1199px) {
+    width: 95%;
+  }
 `;
 
 export const Title = styled.h1`
@@ -38,6 +42,7 @@ export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-gap: 20px;
+  justify-items: center;
   padding: 10px;
 `;
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { withRouter } from "react-router-dom";
 
 import firebase from "../../firebase/firebase";
@@ -18,8 +18,12 @@ import { useAuthContext } from "components/Auth";
 export function Header(props) {
   const user = useAuthContext();
 
-  const isAuthPage = [ROUTES.Root, ROUTES.Login, ROUTES.Register].includes(
-    props.location.pathname
+  const isAuthPage = useMemo(
+    () =>
+      [ROUTES.Root, ROUTES.Login, ROUTES.Register].includes(
+        props.location.pathname
+      ),
+    [props.location.pathname]
   );
 
   function handleLogout() {
