@@ -19,8 +19,11 @@ import {
   Row,
   EditButton,
   RemoveButton,
-  Title
+  Title,
+  NotFound
 } from "./ContactsList.components";
+import SearchContacts from "./SearchContacts";
+import mapContacts from "../utils/mapContacts";
 import { useAuthContext } from "components/Auth";
 
 const ASSETS_PATH = `${process.env.PUBLIC_URL}/assets`;
@@ -31,67 +34,85 @@ function ContactsList(props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    contactsService.getContacts(user.uid).then(contacts => {
-      setContacts(
-        contacts.map(({ id, firstName, lastName, phone, email, skype }) => ({
-          id,
-          name: `${firstName} ${lastName}`,
-          phone,
-          email,
-          skype
-        }))
-      );
+    try {
+      setLoading(true);
+      contactsService.getContacts(user.uid).then(contacts => {
+        setContacts(mapContacts(contacts));
+        setLoading(false);
+      });
+    } catch (error) {
+      // TODO: Catch firebase errors
       setLoading(false);
-    });
+    }
   }, [user.uid]);
 
   function handleRemoveContact(docId) {
     try {
       contactsService.removeContact(docId);
       setContacts(contacts => contacts.filter(contact => contact.id !== docId));
-    } catch (error) {}
+    } catch (error) {
+      // TODO: Catch firebase errors
+    }
   }
 
-  return loading ? (
-    <Loader />
-  ) : (
+  async function handleSearchContacts(contact) {
+    try {
+      setLoading(true);
+      const contacts = await contactsService.searchContacts(user.uid, contact);
+      setContacts(mapContacts(contacts));
+    } catch (error) {
+      // TODO: Catch firebase error
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
     <Wrapper>
       <Title>Contacts List</Title>
       <NewContact>
         <Link to={ROUTES.NewContact}>Add Contact +</Link>
       </NewContact>
-      <Grid>
-        {contacts.map(({ id, ...rest }) => (
-          <ContactCard key={id}>
-            <Row css="display: flex; justify-content: flex-end">
-              <EditButton
-                imgUrl={`${ASSETS_PATH}/edit_icon.png`}
-                onClick={() => props.history.push(`/contacts/${id}/edit`)}
-              />
-              <RemoveButton
-                imgUrl={`${ASSETS_PATH}/remove_icon.png`}
-                onClick={() => handleRemoveContact(id)}
-              />
-            </Row>
-            <Avatar />
-            {Object.keys(rest).map(key => (
-              <Row key={key}>
-                {key === "name" ? (
-                  <NameIcon />
-                ) : key === "phone" ? (
-                  <PhoneIcon />
-                ) : key === "email" ? (
-                  <EmailIcon />
-                ) : key === "skype" ? (
-                  <SkypeIcon />
-                ) : null}
-                <Text>{rest[key]}</Text>
-              </Row>
-            ))}
-          </ContactCard>
-        ))}
-      </Grid>
+      <SearchContacts onSearch={handleSearchContacts} />
+      {loading ? (
+        <Loader />
+      ) : (
+        <Grid>
+          {!loading && contacts.length > 0 ? (
+            contacts.map(({ id, ...rest }) => (
+              <ContactCard key={id}>
+                <Row css="display: flex; justify-content: flex-end">
+                  <EditButton
+                    imgUrl={`${ASSETS_PATH}/edit_icon.png`}
+                    onClick={() => props.history.push(`/contacts/${id}/edit`)}
+                  />
+                  <RemoveButton
+                    imgUrl={`${ASSETS_PATH}/remove_icon.png`}
+                    onClick={() => handleRemoveContact(id)}
+                  />
+                </Row>
+                <Avatar />
+                {Object.keys(rest).map(key => (
+                  <Row key={key}>
+                    {key === "name" ? (
+                      <NameIcon />
+                    ) : key === "phone" ? (
+                      <PhoneIcon />
+                    ) : key === "email" ? (
+                      <EmailIcon />
+                    ) : key === "skype" ? (
+                      <SkypeIcon />
+                    ) : null}
+                    <Text>{rest[key]}</Text>
+                  </Row>
+                ))}
+              </ContactCard>
+            ))
+          ) : (
+            <NotFound>Contacts not found</NotFound>
+          )}
+        </Grid>
+      )}
     </Wrapper>
   );
 }

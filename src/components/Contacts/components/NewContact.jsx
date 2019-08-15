@@ -61,7 +61,7 @@ function NewContact(props) {
           });
         });
     }
-  }, [isEditMode, props.match.params.id, setInitialValues]);
+  }, [isEditMode, props.match.params.id]);
 
   async function createContact() {
     return await contactsService.createContact({

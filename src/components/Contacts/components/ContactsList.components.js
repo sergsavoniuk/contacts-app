@@ -1,10 +1,12 @@
 import styled, { css } from "styled-components";
 
+import { Input } from "components/shared/formControls.components";
+
 export const Wrapper = styled.div`
   display: grid;
   max-width: 1200px;
   margin: 50px auto;
-  padding: 10px;
+  padding: 30px;
   border: 1px solid #e2e2e2;
 
   @media (max-width: 1199px) {
@@ -41,9 +43,9 @@ export const NewContact = styled.div`
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 20px;
+  grid-gap: 20px 0;
   justify-items: center;
-  padding: 10px;
+  padding: 10px 0;
 `;
 
 export const ContactCard = styled.div`
@@ -128,3 +130,16 @@ export const RemoveButton = styled.button`
 `;
 
 export const Text = styled.span``;
+
+export const SearchInput = styled(Input)`
+  background: url(${process.env.PUBLIC_URL}/assets/search_icon.png) no-repeat
+    scroll 5px 5px;
+  padding-left: 40px;
+  width: 100%;
+
+  @media (max-width: 320px) {
+    width: 250px;
+  }
+`;
+
+export const NotFound = styled.h3``;
