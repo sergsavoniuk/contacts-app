@@ -7,6 +7,8 @@ import Routes from "./components/routes";
 import { AuthProvider } from "./components/Auth";
 
 const GlobalStyles = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed&display=swap');
+
   * {
     box-sizing: border-box;
   }
@@ -17,7 +19,7 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
     background-color: #fff;
-    font-family: IBM Plex Mono, Space Grotesk, Roboto Slab, sans-serif;
+    font-family: 'Barlow Semi Condensed', sans-serif;
     font-size: 16px;
   }
 `;
