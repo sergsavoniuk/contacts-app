@@ -46,9 +46,9 @@ function ContactsList(props) {
     }
   }, [user.uid]);
 
-  function handleRemoveContact(docId) {
+  async function handleRemoveContact(docId) {
     try {
-      contactsService.removeContact(docId);
+      await contactsService.removeContact(docId);
       setContacts(contacts => contacts.filter(contact => contact.id !== docId));
     } catch (error) {
       // TODO: Catch firebase errors
