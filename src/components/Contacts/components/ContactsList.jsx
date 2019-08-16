@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import "styled-components/macro";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import 'styled-components/macro';
 
-import contactsService from "api/contacts";
-import ROUTES from "constants/routes";
-import Loader from "components/Loader";
+import contactsService from 'api/contacts';
+import ROUTES from 'constants/routes';
+import Loader from 'components/Loader';
 import {
   Wrapper,
   NewContact,
@@ -21,10 +21,11 @@ import {
   RemoveButton,
   Title,
   NotFound
-} from "./ContactsList.components";
-import SearchContacts from "./SearchContacts";
-import mapContacts from "../utils/mapContacts";
-import { useAuthContext } from "components/Auth";
+} from './ContactsList.components';
+import SearchContacts from './SearchContacts';
+import mapContacts from '../utils/mapContacts';
+import { useAuthContext } from 'components/Auth';
+import { routerPropTypes } from 'utils/routerPropTypes';
 
 const ASSETS_PATH = `${process.env.PUBLIC_URL}/assets`;
 
@@ -81,7 +82,7 @@ function ContactsList(props) {
           {!loading && contacts.length > 0 ? (
             contacts.map(({ id, ...rest }) => (
               <ContactCard key={id}>
-                <Row css="display: flex; justify-content: flex-end">
+                <Row css='display: flex; justify-content: flex-end'>
                   <EditButton
                     imgUrl={`${ASSETS_PATH}/edit_icon.png`}
                     onClick={() => props.history.push(`/contacts/${id}/edit`)}
@@ -94,13 +95,13 @@ function ContactsList(props) {
                 <Avatar />
                 {Object.keys(rest).map(key => (
                   <Row key={key}>
-                    {key === "name" ? (
+                    {key === 'name' ? (
                       <NameIcon />
-                    ) : key === "phone" ? (
+                    ) : key === 'phone' ? (
                       <PhoneIcon />
-                    ) : key === "email" ? (
+                    ) : key === 'email' ? (
                       <EmailIcon />
-                    ) : key === "skype" ? (
+                    ) : key === 'skype' ? (
                       <SkypeIcon />
                     ) : null}
                     <Text>{rest[key]}</Text>
@@ -116,5 +117,7 @@ function ContactsList(props) {
     </Wrapper>
   );
 }
+
+ContactsList.propTypes = routerPropTypes;
 
 export default ContactsList;

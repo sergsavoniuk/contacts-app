@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import { Redirect } from 'react-router-dom';
 
-import SocialLinks from "./SocialLinks";
-import useFormValidation from "utils/useFormValidation";
-import validateAuth from "../utils/validateAuth";
-import Loader from "components/Loader";
-import authService from "api/auth";
-import ROUTES from "constants/routes";
+import SocialLinks from './SocialLinks';
+import useFormValidation from 'utils/useFormValidation';
+import validateAuth from '../utils/validateAuth';
+import Loader from 'components/Loader';
+import authService from 'api/auth';
+import ROUTES from 'constants/routes';
 import {
   FormWrapper,
   Input,
@@ -14,14 +14,15 @@ import {
   Title,
   Error,
   ErrorAlert
-} from "components/shared/formControls.components";
-import { Label, Link } from "./Auth.components";
-import { useAuthContext } from "./AuthContext";
+} from 'components/shared/formControls.components';
+import { Label, Link } from './Auth.components';
+import { useAuthContext } from './AuthContext';
+import { routerPropTypes } from 'utils/routerPropTypes';
 
 const INITIAL_STATE = {
-  name: "",
-  email: "",
-  password: ""
+  name: '',
+  email: '',
+  password: ''
 };
 
 function Auth(props) {
@@ -76,26 +77,26 @@ function Auth(props) {
 
   return (
     <FormWrapper>
-      <Title>{hasAccount ? "Login" : "Register"}</Title>
+      <Title>{hasAccount ? 'Login' : 'Register'}</Title>
       {serverError && <ErrorAlert>{serverError}</ErrorAlert>}
       <SocialLinks onSignIn={handleSignInThroughSocials} />
       <form onSubmit={handleSubmit}>
         <Label>or through email</Label>
         {!hasAccount && (
           <Input
-            name="name"
+            name='name'
             value={name}
             onChange={handleChange}
-            placeholder="Enter name"
+            placeholder='Enter name'
             disabled={isSubmitting}
           />
         )}
         <>
           <Input
-            name="email"
+            name='email'
             value={email}
             onChange={handleChange}
-            placeholder="Enter email"
+            placeholder='Enter email'
             disabled={isSubmitting}
             error={emailErr}
           />
@@ -103,18 +104,18 @@ function Auth(props) {
         </>
         <>
           <Input
-            name="password"
+            name='password'
             value={password}
             onChange={handleChange}
-            type="password"
-            placeholder="Enter password"
+            type='password'
+            placeholder='Enter password'
             disabled={isSubmitting}
             error={passwordErr}
           />
           {passwordErr && <Error>{passwordErr}</Error>}
         </>
         <SubmitButton disabled={isSubmitting}>
-          {isSubmitting ? <Loader alignment="0 auto" size="30" /> : "Submit"}
+          {isSubmitting ? <Loader alignment='0 auto' size='30' /> : 'Submit'}
         </SubmitButton>
         {hasAccount
           ? !isSubmitting && (
@@ -127,5 +128,7 @@ function Auth(props) {
     </FormWrapper>
   );
 }
+
+Auth.propTypes = routerPropTypes;
 
 export default Auth;

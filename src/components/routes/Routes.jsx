@@ -1,22 +1,22 @@
-import React, { lazy, Suspense } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import React, { lazy, Suspense } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
-import Loader from "components/Loader";
-import Auth, { useAuthContext } from "components/Auth";
-import ProtectedRoute from "./ProtectedRoute";
-import ROUTES from "constants/routes";
+import Loader from 'components/Loader';
+import Auth, { useAuthContext } from 'components/Auth';
+import ProtectedRoute from './ProtectedRoute';
+import ROUTES from 'constants/routes';
 
 const ContactsList = lazy(() =>
-  import(/* webpackChunkName: "ContactsList" */ "components/Contacts")
+  import(/* webpackChunkName: "ContactsList" */ 'components/Contacts')
 );
 
 const NewContact = lazy(() =>
   import(
-    /* webpackChunkName: "NewContact" */ "components/Contacts/components/NewContact"
+    /* webpackChunkName: "NewContact" */ 'components/Contacts/components/NewContact'
   )
 );
 
-function Routes(props) {
+function Routes() {
   const user = useAuthContext();
 
   if (user.isAuthorized === null) {

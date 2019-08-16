@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
-import { withRouter } from "react-router-dom";
+import React, { useMemo, memo } from 'react';
+import { withRouter } from 'react-router-dom';
 
-import firebase from "../../firebase/firebase";
-import authService from "api/auth";
-import ROUTES from "constants/routes";
+import firebase from '../../firebase/firebase';
+import authService from 'api/auth';
+import ROUTES from 'constants/routes';
 import {
   Wrapper,
   Logo,
@@ -12,8 +12,9 @@ import {
   LogoutButton,
   Box,
   Username
-} from "./Header.components";
-import { useAuthContext } from "components/Auth";
+} from './Header.components';
+import { useAuthContext } from 'components/Auth';
+import { routerPropTypes } from 'utils/routerPropTypes';
 
 export function Header(props) {
   const user = useAuthContext();
@@ -54,4 +55,10 @@ export function Header(props) {
   );
 }
 
-export default withRouter(Header);
+Header.propTypes = routerPropTypes;
+
+function areEqual(prevProps, nextProps) {
+  return true;
+}
+
+export default withRouter(memo(Header, areEqual));

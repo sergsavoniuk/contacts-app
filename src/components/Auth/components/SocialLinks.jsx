@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react';
+import { func } from 'prop-types';
 
-import PROVIDERS from "constants/providers";
+import PROVIDERS from 'constants/providers';
 import {
   Wrapper,
   LinksContainer,
@@ -10,7 +11,7 @@ import {
   HorizontalBreak,
   GoogleIcon,
   FacebookIcon
-} from "./Auth.components";
+} from './Auth.components';
 
 function SocialLinks({ onSignIn }) {
   function handleSignIn(event) {
@@ -33,5 +34,9 @@ function SocialLinks({ onSignIn }) {
     </Wrapper>
   );
 }
+
+SocialLinks.propTypes = {
+  onSignIn: func.isRequired
+};
 
 export default SocialLinks;
