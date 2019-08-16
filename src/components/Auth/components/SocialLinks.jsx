@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { func } from 'prop-types';
 
 import PROVIDERS from 'constants/providers';
@@ -14,7 +14,7 @@ import {
 } from './Auth.components';
 
 function SocialLinks({ onSignIn }) {
-  function handleSignIn(event) {
+  async function handleSignIn(event) {
     const providerName = event.target.name || event.target.parentNode.name;
     onSignIn(providerName);
   }
@@ -39,4 +39,4 @@ SocialLinks.propTypes = {
   onSignIn: func.isRequired
 };
 
-export default SocialLinks;
+export default memo(SocialLinks);

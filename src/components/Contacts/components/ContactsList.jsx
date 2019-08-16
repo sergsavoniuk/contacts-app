@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import 'styled-components/macro';
 
@@ -56,17 +56,23 @@ function ContactsList(props) {
     }
   }
 
-  async function handleSearchContacts(contact) {
-    try {
-      setLoading(true);
-      const contacts = await contactsService.searchContacts(user.uid, contact);
-      setContacts(mapContacts(contacts));
-    } catch (error) {
-      // TODO: Catch firebase error
-    } finally {
-      setLoading(false);
-    }
-  }
+  const handleSearchContacts = useCallback(
+    async contact => {
+      try {
+        setLoading(true);
+        const contacts = await contactsService.searchContacts(
+          user.uid,
+          contact
+        );
+        setContacts(mapContacts(contacts));
+      } catch (error) {
+        // TODO: Catch firebase error
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user.uid]
+  );
 
   return (
     <Wrapper>

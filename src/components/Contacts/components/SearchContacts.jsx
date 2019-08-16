@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { func } from 'prop-types';
 
 import { SearchInput } from './ContactsList.components';
@@ -25,4 +25,4 @@ SearchContacts.propTypes = {
   onSearch: func.isRequired
 };
 
-export default SearchContacts;
+export default memo(SearchContacts);

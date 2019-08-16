@@ -57,8 +57,16 @@ export function Header(props) {
 
 Header.propTypes = routerPropTypes;
 
+const LoginRoutes = [ROUTES.Root, ROUTES.Login, ROUTES.Register];
+
 function areEqual(prevProps, nextProps) {
-  return true;
+  const prevPathname = prevProps.location.pathname;
+  const nextPathname = nextProps.location.pathname;
+  return (
+    (!LoginRoutes.includes(prevPathname) &&
+      LoginRoutes.includes(nextPathname)) ||
+    (LoginRoutes.includes(prevPathname) && !LoginRoutes.includes(nextPathname))
+  );
 }
 
 export default withRouter(memo(Header, areEqual));

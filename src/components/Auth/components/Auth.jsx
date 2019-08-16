@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import SocialLinks from './SocialLinks';
@@ -26,8 +26,9 @@ const INITIAL_STATE = {
 };
 
 function Auth(props) {
-  const prevPathname = useRef(null);
-  const [hasAccount, setHasAccount] = useState(true);
+  const [hasAccount, setHasAccount] = useState(
+    props.location.pathname === ROUTES.Login
+  );
 
   const {
     values: { name, email, password },
@@ -39,14 +40,25 @@ function Auth(props) {
   } = useFormValidation({
     initialState: INITIAL_STATE,
     validate: validateAuth,
-    submit: authenticate,
-    redirectAfterSuccess: () => props.history.push(ROUTES.ContactsList)
+    submit: useCallback(
+      async values => {
+        const { name, email, password } = values;
+        hasAccount
+          ? await authService.login({ email, password })
+          : await authService.register({ name, email, password });
+      },
+      [hasAccount]
+    ),
+    redirectAfterSuccess: useCallback(
+      () => props.history.push(ROUTES.ContactsList),
+      [props.history]
+    )
   });
 
+  const prevPathname = useRef(null);
   useEffect(() => {
     const currentPathname = props.location.pathname;
     setHasAccount(currentPathname === ROUTES.Login);
-
     if (
       prevPathname.current !== null &&
       prevPathname.current !== currentPathname
@@ -57,15 +69,9 @@ function Auth(props) {
     prevPathname.current = currentPathname;
   }, [props.location.pathname, setInitialValues]);
 
-  async function authenticate() {
-    hasAccount
-      ? await authService.login({ email, password })
-      : await authService.register({ name, email, password });
-  }
-
-  async function handleSignInThroughSocials(providerName) {
+  const handleSignInThroughSocials = useCallback(async providerName => {
     await authService.authenticateThroughSocials(providerName);
-  }
+  }, []);
 
   const user = useAuthContext();
 
@@ -115,7 +121,7 @@ function Auth(props) {
           {passwordErr && <Error>{passwordErr}</Error>}
         </>
         <SubmitButton disabled={isSubmitting}>
-          {isSubmitting ? <Loader alignment='0 auto' size='30' /> : 'Submit'}
+          {isSubmitting ? <Loader alignment='0 auto' size={30} /> : 'Submit'}
         </SubmitButton>
         {hasAccount
           ? !isSubmitting && (

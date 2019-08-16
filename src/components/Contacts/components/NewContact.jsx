@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 
 import contactsService from 'api/contacts';
 import Loader from 'components/Loader';
@@ -21,6 +21,37 @@ function NewContact(props) {
   const isEditMode = useMemo(() => props.match.path === ROUTES.EditContact, [
     props.match.path
   ]);
+
+  const createContact = useCallback(
+    async values => {
+      const { firstName, lastName, phone, email, skype } = values;
+      return await contactsService.createContact({
+        parentUID: user.uid,
+        firstName,
+        lastName,
+        phone,
+        email,
+        skype
+      });
+    },
+    [user.uid]
+  );
+
+  const updateContact = useCallback(
+    async values => {
+      const { firstName, lastName, phone, email, skype } = values;
+      const contactId = props.match.params.id;
+      return await contactsService.updateContact({
+        id: contactId,
+        firstName,
+        lastName,
+        phone,
+        email,
+        skype
+      });
+    },
+    [props.match.params.id]
+  );
 
   const {
     values: { firstName, lastName, phone, email, skype },
@@ -62,29 +93,7 @@ function NewContact(props) {
           });
         });
     }
-  }, [isEditMode, props.match.params.id]);
-
-  async function createContact() {
-    return await contactsService.createContact({
-      parentUID: user.uid,
-      firstName,
-      lastName,
-      phone,
-      email,
-      skype
-    });
-  }
-
-  async function updateContact() {
-    return await contactsService.updateContact({
-      id: props.match.params.id,
-      firstName,
-      lastName,
-      phone,
-      email,
-      skype
-    });
-  }
+  }, [isEditMode, props.match.params.id, setInitialValues]);
 
   return (
     <FormWrapper>
