@@ -62,7 +62,7 @@ const LoginRoutes = [ROUTES.Root, ROUTES.Login, ROUTES.Register];
 function areEqual(prevProps, nextProps) {
   const prevPathname = prevProps.location.pathname;
   const nextPathname = nextProps.location.pathname;
-  return (
+  return !(
     (!LoginRoutes.includes(prevPathname) &&
       LoginRoutes.includes(nextPathname)) ||
     (LoginRoutes.includes(prevPathname) && !LoginRoutes.includes(nextPathname))
