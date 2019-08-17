@@ -1,3 +1,7 @@
+![App screenshots](https://github.com/sergsavoniuk/contacts-app/blob/master/app-screenshots.jpg)
+
+<hr />
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Introduction
@@ -10,7 +14,6 @@ Contact manager app that allows users to login/register to store contact informa
 - **React Router** — declarative routing
 - **Styled Components** — styling components using tagged template literals
 - **Firebase** — authentication, realtime db, hosting
-
 
 ## Getting started
 
