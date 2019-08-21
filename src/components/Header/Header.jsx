@@ -27,8 +27,8 @@ export function Header(props) {
     [props.location.pathname]
   );
 
-  function handleLogout() {
-    authService.logout();
+  async function handleLogout() {
+    await authService.logout();
     props.history.push(ROUTES.Login);
   }
 
