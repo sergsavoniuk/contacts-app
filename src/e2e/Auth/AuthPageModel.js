@@ -54,12 +54,6 @@ class AuthPageModel {
     await t.click(Selector('button[data-testid="logout"]'));
   }
 
-  async assertIfSpinnerIsVisible() {
-    await t
-      .expect(Selector('[data-testid="spinner"]').exists)
-      .ok({ timeout: 3000 });
-  }
-
   async assertIfFormInputsAreDisabled({ checkNameInput = false } = {}) {
     const inputsKeys = Object.keys(this.inputs);
 

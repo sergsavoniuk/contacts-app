@@ -1,13 +1,19 @@
 /* eslint-disable no-undef */
-import { Selector, ClientFunction } from "testcafe";
+import { Selector } from "testcafe";
 import faker from "faker";
 
-import pageModel, { generateFakeContact } from "./ContactsListPageModel";
-import authPageModel from "../../Auth/__test__/AuthPageModel";
+import pageModel, { generateFakeContact } from "./ContactsPageModel";
+import authPageModel from "../Auth/AuthPageModel";
 
-const getPageURL = ClientFunction(() => window.location.href);
+import {
+  getPageURL,
+  assertIfSpinnerIsVisible,
+  assertIfWeAreOnThePage,
+} from "../utils";
 
-fixture`Contacts List functionality`.page("http://localhost:3000/contacts");
+const baseURL = "http://localhost:3000/contacts";
+
+fixture`Contacts List functionality`.page(baseURL);
 
 test.before(async () => {
   if ((await getPageURL()).includes("/login")) {
@@ -18,6 +24,7 @@ test.before(async () => {
   }
 })("CRUD operations + searching", async (t) => {
   await pageModel.clickOnAddContactButton();
+  await assertIfWeAreOnThePage("/contacts/new");
   await pageModel.assertIfFormInputsAreEmpty();
   await t.click(pageModel.buttons.submit);
   await pageModel.assertIfErrorsAreVisible();
@@ -28,9 +35,9 @@ test.before(async () => {
 
   const createContact = async (contact) => {
     await pageModel.createContact(contact);
-    // await pageModel.assertIfSpinnerIsVisible();
+    // await assertIfSpinnerIsVisible();
     // await pageModel.assertIfFormInputsAreDisabled();
-    await t.expect(getPageURL()).contains("/contacts");
+    await assertIfWeAreOnThePage("/contacts");
     await pageModel.assertIfNewContactAppearedInTheList(contact);
   };
 
@@ -44,6 +51,7 @@ test.before(async () => {
   // Updating contact
 
   await pageModel.clickOnEditContactButton(contact.clientId);
+  await assertIfWeAreOnThePage("/edit");
 
   await t
     .click(pageModel.inputs.firstName)
@@ -59,23 +67,23 @@ test.before(async () => {
 
   await pageModel.updateContact(updatedContact);
 
-  await pageModel.assertIfSpinnerIsVisible();
+  await assertIfSpinnerIsVisible();
   // await pageModel.assertIfFormInputsAreDisabled();
 
-  await t.expect(getPageURL()).contains("/contacts");
+  await assertIfWeAreOnThePage("/contacts");
 
   await pageModel.assertIfContactUpdatedInTheList(updatedContact);
 
   // Searching for contact
 
   await t.typeText(pageModel.searchContactInput, "Unknown user");
-  await pageModel.assertIfSpinnerIsVisible();
-  await t.expect(Selector('[data-testid="not-found"]').exists).ok();
+  await assertIfSpinnerIsVisible();
+  await t.expect(pageModel.notFoundContainer.exists).ok();
   await t.typeText(pageModel.searchContactInput, updatedContact.firstName, {
     replace: true,
   });
-  await pageModel.assertIfSpinnerIsVisible();
-  await t.expect(Selector('[data-testid="not-found"]').exists).notOk();
+  await assertIfSpinnerIsVisible();
+  await t.expect(pageModel.notFoundContainer.exists).notOk();
   await t.expect(Selector('[data-testid="contacts"]').childElementCount).eql(1);
 
   // Deleting contact

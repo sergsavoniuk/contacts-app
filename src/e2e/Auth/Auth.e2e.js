@@ -1,17 +1,23 @@
 /* eslint-disable no-undef */
-import { ClientFunction } from "testcafe";
-
 import pageModel, { generateFakeUser } from "./AuthPageModel";
+
+import {
+  getPageURL,
+  assertIfSpinnerIsVisible,
+  assertIfWeAreOnThePage,
+} from "../utils";
 
 const emails = require("./fixtures/emails.json");
 const passwords = require("./fixtures/passwords.json");
 
-const getPageURL = ClientFunction(() => window.location.href);
+const registerURL = "http://localhost:3000/register";
+const loginURL = "http://localhost:3000/login";
 
 fixture`Registration Flow - using email and password`
-  .page`http://localhost:3000/register`.before(async (ctx) => {
-  ctx.user = {};
-});
+  .page(registerURL)
+  .before(async (ctx) => {
+    ctx.user = {};
+  });
 
 emails.forEach(({ email, resultText }) => {
   test(`should display the error if the email is invalid - ${email}`, async (t) => {
@@ -46,10 +52,8 @@ passwords.forEach(({ password, resultText }) => {
 });
 
 test('should navigate to Login page when a user clicks on "already have an account" link', async (t) => {
-  await t
-    .click(pageModel.links.hasAccount)
-    .expect(getPageURL())
-    .contains("login");
+  await t.click(pageModel.links.hasAccount);
+  await assertIfWeAreOnThePage("/login");
 });
 
 test("should display errors if email and/or password is empty", async (t) => {
@@ -65,20 +69,20 @@ test("should display errors if email and/or password is empty", async (t) => {
 test("should successfully register a new user", async (t) => {
   t.fixtureCtx.user = generateFakeUser();
   await pageModel.register(t.fixtureCtx.user);
-  await pageModel.assertIfSpinnerIsVisible();
+  await assertIfSpinnerIsVisible();
   // await pageModel.assertIfFormInputsAreDisabled({ checkNameInput: true });
   // await t.expect(pageModel.inputs.name.hasAttribute("disabled")).ok();
   // await t.expect(pageModel.inputs.email.hasAttribute("disabled")).ok();
   // await t.expect(pageModel.inputs.password.hasAttribute("disabled")).ok();
-  await t.expect(getPageURL()).contains("/contacts");
+  await assertIfWeAreOnThePage("/contacts");
 }).after(async (t) => {
   await pageModel.logout();
-  await t.navigateTo(`http://localhost:3000/register`);
+  await t.navigateTo(registerURL);
 });
 
 test("should display an error if a user with the entered email already exist", async (t) => {
   await pageModel.register(t.fixtureCtx.user);
-  // await pageModel.assertIfSpinnerIsVisible();
+  // await assertIfSpinnerIsVisible();
   // await pageModel.assertIfFormInputsAreDisabled({ checkNameInput: true });
   // await t.expect(pageModel.inputs.name.hasAttribute("disabled")).ok();
   // await t.expect(pageModel.inputs.email.hasAttribute("disabled")).ok();
@@ -86,17 +90,15 @@ test("should display an error if a user with the entered email already exist", a
   await t.expect(pageModel.errors.emailInUse.exists).ok();
 });
 
-fixture`Login Flow`.page`http://localhost:3000/login`.beforeEach(async () => {
+fixture`Login Flow`.page(loginURL).beforeEach(async () => {
   if ((await getPageURL()).includes("/contacts")) {
     await pageModel.logout();
   }
 });
 
 test('should navigate to Register page when a user clicks on "need to create an account?" link', async (t) => {
-  await t
-    .click(pageModel.links.createAccount)
-    .expect(getPageURL())
-    .contains("register");
+  await t.click(pageModel.links.createAccount);
+  await assertIfWeAreOnThePage("/register");
 });
 
 test("should display errors if email and/or password is empty", async (t) => {
@@ -114,7 +116,7 @@ test("should display an error if the credentials are invalid", async (t) => {
   await t.expect(pageModel.errors.noUserFound.exists).ok();
 });
 
-test.page`http://localhost:3000/register`.before(async (t) => {
+test.page(registerURL).before(async (t) => {
   // Register a user that we're going to use to log in
 
   t.ctx.user = generateFakeUser();
@@ -125,9 +127,9 @@ test.page`http://localhost:3000/register`.before(async (t) => {
     email: t.ctx.user.email,
     password: t.ctx.user.password,
   });
-  await pageModel.assertIfSpinnerIsVisible();
+  await assertIfSpinnerIsVisible();
   await t.expect(pageModel.inputs.email.hasAttribute("disabled")).ok();
   await t.expect(pageModel.inputs.password.hasAttribute("disabled")).ok();
   // await pageModel.assertIfFormInputsAreDisabled();
-  await t.expect(getPageURL()).contains("/contacts");
+  await assertIfWeAreOnThePage("/contacts");
 });
