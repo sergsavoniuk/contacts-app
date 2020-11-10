@@ -1,29 +1,31 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo, useCallback, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-import contactsService from 'api/contacts';
-import Loader from 'components/Loader';
-import useFormValidation from 'utils/useFormValidation';
-import validateContact from '../utils/validateContact';
-import ROUTES from 'constants/routes';
+import contactsService from "api/contacts";
+import Loader from "components/Loader";
+import useFormValidation from "utils/useFormValidation";
+import validateContact from "../utils/validateContact";
+import ROUTES from "constants/routes";
 import {
   FormWrapper,
   Input,
   Title,
   SubmitButton,
-  Error
-} from 'components/shared/formControls.components';
-import { useAuthContext } from 'components/Auth';
-import { routerPropTypes } from 'utils/routerPropTypes';
+  Error,
+} from "components/shared/formControls.components";
+import { useAuthContext } from "components/Auth";
+import { routerPropTypes } from "utils/routerPropTypes";
 
 function NewContact(props) {
+  const clientId = useRef();
   const user = useAuthContext();
 
   const isEditMode = useMemo(() => props.match.path === ROUTES.EditContact, [
-    props.match.path
+    props.match.path,
   ]);
 
   const createContact = useCallback(
-    async values => {
+    async (values) => {
       const { firstName, lastName, phone, email, skype } = values;
       return await contactsService.createContact({
         parentUID: user.uid,
@@ -31,15 +33,16 @@ function NewContact(props) {
         lastName,
         phone,
         email,
-        skype
+        skype,
+        clientId: clientId.current.value || uuidv4(),
       });
     },
     [user.uid]
   );
 
   const updateContact = useCallback(
-    async values => {
-      const { firstName, lastName, phone, email, skype } = values;
+    async (values) => {
+      const { firstName, lastName, phone, email, skype, clientId } = values;
       const contactId = props.match.params.id;
       return await contactsService.updateContact({
         id: contactId,
@@ -47,7 +50,8 @@ function NewContact(props) {
         lastName,
         phone,
         email,
-        skype
+        skype,
+        clientId,
       });
     },
     [props.match.params.id]
@@ -60,36 +64,37 @@ function NewContact(props) {
       lastName: lastNameErr,
       phone: phoneErr,
       email: emailErr,
-      skype: skypeErr
+      skype: skypeErr,
     } = {},
     isSubmitting,
     setInitialValues,
     handleChange,
-    handleSubmit
+    handleSubmit,
   } = useFormValidation({
     initialState: {
-      firstName: '',
-      lastName: '',
-      phone: '',
-      email: '',
-      skype: ''
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
+      skype: "",
     },
     validate: validateContact,
     submit: isEditMode ? updateContact : createContact,
-    redirectAfterSuccess: () => props.history.push(ROUTES.ContactsList)
+    redirectAfterSuccess: () => props.history.push(ROUTES.ContactsList),
   });
 
   useEffect(() => {
     if (isEditMode) {
       contactsService
         .getContact(props.match.params.id)
-        .then(({ firstName, lastName, phone, email, skype }) => {
+        .then(({ firstName, lastName, phone, email, skype, clientId }) => {
           setInitialValues({
             firstName,
             lastName,
             phone,
             email,
-            skype
+            skype,
+            clientId,
           });
         });
     }
@@ -97,14 +102,14 @@ function NewContact(props) {
 
   return (
     <FormWrapper>
-      <Title>{isEditMode ? 'Edit Contact' : 'Add Contact'}</Title>
+      <Title>{isEditMode ? "Edit Contact" : "Add Contact"}</Title>
       <form onSubmit={handleSubmit}>
         <>
           <Input
-            name='firstName'
+            name="firstName"
             value={firstName}
             onChange={handleChange}
-            placeholder='First name'
+            placeholder="First name"
             disabled={isSubmitting}
             error={firstNameErr}
           />
@@ -112,10 +117,10 @@ function NewContact(props) {
         </>
         <>
           <Input
-            name='lastName'
+            name="lastName"
             value={lastName}
             onChange={handleChange}
-            placeholder='Last name'
+            placeholder="Last name"
             disabled={isSubmitting}
             error={lastNameErr}
           />
@@ -123,10 +128,10 @@ function NewContact(props) {
         </>
         <>
           <Input
-            name='phone'
+            name="phone"
             value={phone}
             onChange={handleChange}
-            placeholder='Phone number'
+            placeholder="Phone number"
             disabled={isSubmitting}
             error={phoneErr}
           />
@@ -134,10 +139,10 @@ function NewContact(props) {
         </>
         <>
           <Input
-            name='email'
+            name="email"
             value={email}
             onChange={handleChange}
-            placeholder='Email'
+            placeholder="Email"
             disabled={isSubmitting}
             error={emailErr}
           />
@@ -145,17 +150,20 @@ function NewContact(props) {
         </>
         <>
           <Input
-            name='skype'
+            name="skype"
             value={skype}
             onChange={handleChange}
-            placeholder='Skype'
+            placeholder="Skype"
             disabled={isSubmitting}
             error={skypeErr}
           />
           {skypeErr && <Error>{skypeErr}</Error>}
         </>
+        <>
+          <Input type="hidden" name="clientId" ref={clientId} />
+        </>
         <SubmitButton disabled={isSubmitting}>
-          {isSubmitting ? <Loader alignment='0 auto' size={30} /> : 'Submit'}
+          {isSubmitting ? <Loader alignment="0 auto" size={30} /> : "Submit"}
         </SubmitButton>
       </form>
     </FormWrapper>

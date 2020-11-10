@@ -1,9 +1,9 @@
-import React, { useMemo, memo } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useMemo, memo } from "react";
+import { withRouter } from "react-router-dom";
 
-import firebase from '../../firebase/firebase';
-import authService from 'api/auth';
-import ROUTES from 'constants/routes';
+import firebase from "../../firebase/firebase";
+import authService from "api/auth";
+import ROUTES from "constants/routes";
 import {
   Wrapper,
   Logo,
@@ -11,10 +11,10 @@ import {
   Link,
   LogoutButton,
   Box,
-  Username
-} from './Header.components';
-import { useAuthContext } from 'components/Auth';
-import { routerPropTypes } from 'utils/routerPropTypes';
+  Username,
+} from "./Header.components";
+import { useAuthContext } from "components/Auth";
+import { routerPropTypes } from "utils/routerPropTypes";
 
 export function Header(props) {
   const user = useAuthContext();
@@ -46,6 +46,7 @@ export function Header(props) {
                 firebase.auth.currentUser.displayName)}
           </Username>
           <LogoutButton
+            data-testid="logout"
             imgUrl={`${process.env.PUBLIC_URL}/assets/logout_icon.png`}
             onClick={handleLogout}
           />

@@ -36,7 +36,7 @@ export const Input = styled.input`
     border: 1px solid rgba(51, 51, 51, 0.7);
   }
 
-  ${props =>
+  ${(props) =>
     props.error &&
     css`
       border: 1px solid #fd1000;

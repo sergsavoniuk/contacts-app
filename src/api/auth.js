@@ -14,7 +14,7 @@ class AuthService {
     );
 
     return newUser.user.updateProfile({
-      displayName: name
+      displayName: name,
     });
   }
 

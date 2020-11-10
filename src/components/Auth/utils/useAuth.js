@@ -5,7 +5,7 @@ export default function useAuth() {
   const [user, setUser] = useState({ isAuthorized: null });
 
   useEffect(() => {
-    const unsubscribe = firebase.auth.onAuthStateChanged(user => {
+    const unsubscribe = firebase.auth.onAuthStateChanged((user) => {
       if (user) {
         setUser({
           uid: user.uid,
@@ -13,7 +13,7 @@ export default function useAuth() {
           name: user.displayName,
           email: user.email,
           creationTime: user.metadata.creationTime,
-          lastSignInTime: user.metadata.lastSignInTime
+          lastSignInTime: user.metadata.lastSignInTime,
         });
       } else {
         setUser({ isAuthorized: false });

@@ -17,7 +17,9 @@ class ContactsService {
       .get();
 
     const contacts = [];
-    querySnapshot.forEach(doc => contacts.push({ id: doc.id, ...doc.data() }));
+    querySnapshot.forEach((doc) =>
+      contacts.push({ id: doc.id, ...doc.data() })
+    );
 
     return contacts;
   }
@@ -34,7 +36,7 @@ class ContactsService {
         .endAt(contact + "\uf8ff")
         .get();
 
-      querySnapshotByFirstName.forEach(doc =>
+      querySnapshotByFirstName.forEach((doc) =>
         contacts.push({ id: doc.id, ...doc.data() })
       );
 
@@ -46,8 +48,8 @@ class ContactsService {
         .endAt(contact + "\uf8ff")
         .get();
 
-      querySnapshotByLastName.forEach(doc => {
-        if (!contacts.find(contact => contact.id === doc.id)) {
+      querySnapshotByLastName.forEach((doc) => {
+        if (!contacts.find((contact) => contact.id === doc.id)) {
           contacts.push({ id: doc.id, ...doc.data() });
         }
       });

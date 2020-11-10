@@ -67,7 +67,7 @@ export const Row = styled.div`
 
 export const Avatar = styled.img.attrs({
   src: `${process.env.PUBLIC_URL}/assets/contact_icon.png`,
-  alt: "Contact Avatar"
+  alt: "Contact Avatar",
 })`
   width: 80px;
   height: 80px;
@@ -86,28 +86,28 @@ export const ContactIcon = css`
 
 export const NameIcon = styled.img.attrs({
   src: `${process.env.PUBLIC_URL}/assets/name_icon.png`,
-  alt: "Name icon"
+  alt: "Name icon",
 })`
   ${ContactIcon}
 `;
 
 export const PhoneIcon = styled.img.attrs({
   src: `${process.env.PUBLIC_URL}/assets/phone_icon.png`,
-  alt: "Phone icon"
+  alt: "Phone icon",
 })`
   ${ContactIcon}
 `;
 
 export const EmailIcon = styled.img.attrs({
   src: `${process.env.PUBLIC_URL}/assets/email_icon.png`,
-  alt: "Email icon"
+  alt: "Email icon",
 })`
   ${ContactIcon}
 `;
 
 export const SkypeIcon = styled.img.attrs({
   src: `${process.env.PUBLIC_URL}/assets/skype_icon.png`,
-  alt: "Skype icon"
+  alt: "Skype icon",
 })`
   ${ContactIcon}
 `;
@@ -119,13 +119,13 @@ export const ActionButton = css`
 `;
 
 export const EditButton = styled.button`
-  background: url(${props => props.imgUrl}) no-repeat scroll 0 0;
+  background: url(${(props) => props.imgUrl}) no-repeat scroll 0 0;
   margin-right: 5px;
   ${ActionButton}
 `;
 
 export const RemoveButton = styled.button`
-  background: url(${props => props.imgUrl}) no-repeat scroll 0 0;
+  background: url(${(props) => props.imgUrl}) no-repeat scroll 0 0;
   ${ActionButton}
 `;
 

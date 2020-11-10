@@ -1,6 +1,6 @@
 const PROVIDERS = {
   Google: "Google",
-  Facebook: "Facebook"
+  Facebook: "Facebook",
 };
 
 export default PROVIDERS;

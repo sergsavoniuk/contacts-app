@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 export const Logo = styled.img.attrs({
   src: `${process.env.PUBLIC_URL}/assets/contacts_logo.png`,
-  alt: "Application Logo"
+  alt: "Application Logo",
 })`
   width: 48px;
   height: 48px;
@@ -13,7 +13,7 @@ export const Logo = styled.img.attrs({
 export const HeaderTitle = styled.h2``;
 
 export const LogoutButton = styled.button`
-  background: url(${props => props.imgUrl}) no-repeat scroll 0 0 transparent;
+  background: url(${(props) => props.imgUrl}) no-repeat scroll 0 0 transparent;
   border: none;
   width: 36px;
   height: 36px;

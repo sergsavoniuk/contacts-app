@@ -62,12 +62,12 @@ export const FacebookButton = styled(AuthButton)`
 
 export const GoogleIcon = styled.img.attrs({
   src: `${process.env.PUBLIC_URL}/assets/google_provider_icon.png`,
-  alt: "Google Provider icon"
+  alt: "Google Provider icon",
 })``;
 
 export const FacebookIcon = styled.img.attrs({
   src: `${process.env.PUBLIC_URL}/assets/facebook_provider_icon.png`,
-  alt: "Facebook Provider icon"
+  alt: "Facebook Provider icon",
 })``;
 
 export const HorizontalBreak = styled.div`

@@ -1,0 +1,62 @@
+[
+  {
+    "email": "plainaddress",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "#@%^%#$@#$@#.com",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "@example.com",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "Joe Smith <email@example.com>",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "email.example.com",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "email@example@example.com",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": ".email@example.com",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "email.@example.com",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "email..email@example.com",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "email@example.com (Joe Smith)",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "email@example",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "email@111.222.333.44444",
+    "resultText": "Invalid email address"
+  },
+  {
+    "email": "email@example.com",
+    "resultText": ""
+  },
+  {
+    "email": "firstname.lastname@example.com",
+    "resultText": ""
+  },
+  {
+    "email": "_______@example.com",
+    "resultText": ""
+  }
+]

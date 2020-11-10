@@ -1,9 +1,9 @@
-import { useReducer, useCallback } from 'react';
+import { useReducer, useCallback } from "react";
 
-const INPUT_CHANGE = 'INPUT_CHANGE';
-const SET_INITIAL_VALUES = 'SET_INITIAL_VALUES';
-const FORM_SUBMITTING = 'FORM_SUBMITTING';
-const SET_ERRORS = 'SET_ERRORS';
+const INPUT_CHANGE = "INPUT_CHANGE";
+const SET_INITIAL_VALUES = "SET_INITIAL_VALUES";
+const FORM_SUBMITTING = "FORM_SUBMITTING";
+const SET_ERRORS = "SET_ERRORS";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -12,21 +12,21 @@ function reducer(state, action) {
         ...state,
         values: {
           ...state.values,
-          [action.payload.name]: action.payload.value
-        }
+          [action.payload.name]: action.payload.value,
+        },
       };
     }
     case SET_INITIAL_VALUES: {
       return {
         ...state,
         values: action.payload.values,
-        errors: undefined
+        errors: undefined,
       };
     }
     case FORM_SUBMITTING: {
       return {
         ...state,
-        isSubmitting: true
+        isSubmitting: true,
       };
     }
     case SET_ERRORS: {
@@ -34,7 +34,7 @@ function reducer(state, action) {
       return {
         ...state,
         errors,
-        isSubmitting: errors === undefined
+        isSubmitting: errors === undefined,
       };
     }
     default:
@@ -46,7 +46,7 @@ function init(initialState) {
   return {
     values: initialState,
     errors: undefined,
-    isSubmitting: false
+    isSubmitting: false,
   };
 }
 
@@ -54,31 +54,31 @@ export default function useFormValidation({
   initialState,
   validate,
   submit,
-  redirectAfterSuccess
+  redirectAfterSuccess,
 }) {
   const [state, dispatch] = useReducer(reducer, initialState, init);
 
-  const handleChange = useCallback(event => {
+  const handleChange = useCallback((event) => {
     dispatch({
       type: INPUT_CHANGE,
       payload: {
         name: event.target.name,
-        value: event.target.value
-      }
+        value: event.target.value,
+      },
     });
   }, []);
 
-  const setInitialValues = useCallback(values => {
+  const setInitialValues = useCallback((values) => {
     dispatch({
       type: SET_INITIAL_VALUES,
       payload: {
-        values
-      }
+        values,
+      },
     });
   }, []);
 
   const handleSubmit = useCallback(
-    async event => {
+    async (event) => {
       event.preventDefault();
 
       dispatch({ type: FORM_SUBMITTING });
@@ -89,30 +89,30 @@ export default function useFormValidation({
         dispatch({
           type: SET_ERRORS,
           payload: {
-            errors: undefined
-          }
+            errors: undefined,
+          },
         });
 
         try {
           await submit(state.values);
           redirectAfterSuccess();
         } catch (error) {
-          console.error('Server Error', error);
+          console.error("Server Error", error);
           dispatch({
             type: SET_ERRORS,
             payload: {
               errors: {
-                serverError: error.message
-              }
-            }
+                serverError: error.message,
+              },
+            },
           });
         }
       } else if (errors) {
         dispatch({
           type: SET_ERRORS,
           payload: {
-            errors
-          }
+            errors,
+          },
         });
       }
     },
@@ -125,6 +125,6 @@ export default function useFormValidation({
     isSubmitting: state.isSubmitting,
     setInitialValues,
     handleChange,
-    handleSubmit
+    handleSubmit,
   };
 }

@@ -1,10 +1,10 @@
-import React, { useState, memo } from 'react';
-import { func } from 'prop-types';
+import React, { useState, memo } from "react";
+import { func } from "prop-types";
 
-import { SearchInput } from './ContactsList.components';
+import { SearchInput } from "./ContactsList.components";
 
 function SearchContacts({ onSearch }) {
-  const [contact, setContact] = useState('');
+  const [contact, setContact] = useState("");
 
   function handleInputChange(event) {
     const searchableContact = event.target.value;
@@ -14,15 +14,16 @@ function SearchContacts({ onSearch }) {
 
   return (
     <SearchInput
+      name="search-contact"
       value={contact}
       onChange={handleInputChange}
-      placeholder='Enter a contact name'
+      placeholder="Enter a contact name"
     />
   );
 }
 
 SearchContacts.propTypes = {
-  onSearch: func.isRequired
+  onSearch: func.isRequired,
 };
 
 export default memo(SearchContacts);

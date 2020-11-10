@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import 'styled-components/macro';
+import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import "styled-components/macro";
 
-import contactsService from 'api/contacts';
-import ROUTES from 'constants/routes';
-import Loader from 'components/Loader';
+import contactsService from "api/contacts";
+import ROUTES from "constants/routes";
+import Loader from "components/Loader";
 import {
   Wrapper,
   NewContact,
@@ -20,12 +20,12 @@ import {
   EditButton,
   RemoveButton,
   Title,
-  NotFound
-} from './ContactsList.components';
-import SearchContacts from './SearchContacts';
-import mapContacts from '../utils/mapContacts';
-import { useAuthContext } from 'components/Auth';
-import { routerPropTypes } from 'utils/routerPropTypes';
+  NotFound,
+} from "./ContactsList.components";
+import SearchContacts from "./SearchContacts";
+import mapContacts from "../utils/mapContacts";
+import { useAuthContext } from "components/Auth";
+import { routerPropTypes } from "utils/routerPropTypes";
 
 const ASSETS_PATH = `${process.env.PUBLIC_URL}/assets`;
 
@@ -37,7 +37,7 @@ function ContactsList(props) {
   useEffect(() => {
     try {
       setLoading(true);
-      contactsService.getContacts(user.uid).then(contacts => {
+      contactsService.getContacts(user.uid).then((contacts) => {
         setContacts(mapContacts(contacts));
         setLoading(false);
       });
@@ -50,14 +50,16 @@ function ContactsList(props) {
   async function handleRemoveContact(docId) {
     try {
       await contactsService.removeContact(docId);
-      setContacts(contacts => contacts.filter(contact => contact.id !== docId));
+      setContacts((contacts) =>
+        contacts.filter((contact) => contact.id !== docId)
+      );
     } catch (error) {
       // TODO: Catch firebase errors
     }
   }
 
   const handleSearchContacts = useCallback(
-    async contact => {
+    async (contact) => {
       try {
         setLoading(true);
         const contacts = await contactsService.searchContacts(
@@ -84,30 +86,32 @@ function ContactsList(props) {
       {loading ? (
         <Loader />
       ) : (
-        <Grid>
+        <Grid data-testid="contacts">
           {!loading && contacts.length > 0 ? (
-            contacts.map(({ id, ...rest }) => (
-              <ContactCard key={id}>
-                <Row css='display: flex; justify-content: flex-end'>
+            contacts.map(({ id, clientId, ...rest }) => (
+              <ContactCard key={id} data-testid={clientId}>
+                <Row css="display: flex; justify-content: flex-end">
                   <EditButton
+                    aria-label="edit"
                     imgUrl={`${ASSETS_PATH}/edit_icon.png`}
                     onClick={() => props.history.push(`/contacts/${id}/edit`)}
                   />
                   <RemoveButton
+                    aria-label="remove"
                     imgUrl={`${ASSETS_PATH}/remove_icon.png`}
                     onClick={() => handleRemoveContact(id)}
                   />
                 </Row>
                 <Avatar />
-                {Object.keys(rest).map(key => (
+                {Object.keys(rest).map((key) => (
                   <Row key={key}>
-                    {key === 'name' ? (
+                    {key === "name" ? (
                       <NameIcon />
-                    ) : key === 'phone' ? (
+                    ) : key === "phone" ? (
                       <PhoneIcon />
-                    ) : key === 'email' ? (
+                    ) : key === "email" ? (
                       <EmailIcon />
-                    ) : key === 'skype' ? (
+                    ) : key === "skype" ? (
                       <SkypeIcon />
                     ) : null}
                     <Text>{rest[key]}</Text>
@@ -116,7 +120,7 @@ function ContactsList(props) {
               </ContactCard>
             ))
           ) : (
-            <NotFound>Contacts not found</NotFound>
+            <NotFound data-testid="not-found">Contacts not found</NotFound>
           )}
         </Grid>
       )}
